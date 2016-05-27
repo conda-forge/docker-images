@@ -20,6 +20,8 @@ RUN yum update -y && \
                    make \
                    patch \
                    tar \
+                   zip \
+                   unzip \
                    which \
                    libXext-devel \
                    libXrender-devel \
