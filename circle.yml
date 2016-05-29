@@ -9,3 +9,4 @@ dependencies:
 test:
   override:
     - docker build -t condaforge/linux-anvil linux-anvil
+    - docker build -t condaforge/linux-anvil-cudnn linux-anvil-cudnn
