@@ -17,6 +17,7 @@ RUN yum update -y && \
     yum install -y \
                    bzip2 \
                    make \
+                   redhat-lsb-core \
                    patch \
                    tar \
                    which \
