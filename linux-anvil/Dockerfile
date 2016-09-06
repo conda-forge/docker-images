@@ -17,7 +17,6 @@ RUN yum update -y && \
     yum install -y \
                    bzip2 \
                    make \
-                   redhat-lsb-core \
                    patch \
                    tar \
                    which \
@@ -25,14 +24,15 @@ RUN yum update -y && \
                    libXrender-devel \
                    libSM-devel \
                    libX11-devel \
-                   mesa-libGL-devel && \
+                   mesa-libGL-devel \
+                   yum-utils && \
+    rpm -Uvh --nodeps $(repoquery --location --archlist=$(arch) redhat-lsb-core) && \
     yum clean all
 
 # Install devtoolset 2.
 RUN yum update -y && \
     yum install -y \
-                   centos-release-scl \
-                   yum-utils && \
+                   centos-release-scl && \
     yum-config-manager --add-repo http://people.centos.org/tru/devtools-2/devtools-2.repo && \
     yum update -y && \
     yum install -y \
