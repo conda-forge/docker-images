@@ -26,8 +26,12 @@ RUN yum update -y && \
                    libX11-devel \
                    mesa-libGL-devel \
                    yum-utils && \
-    rpm -Uvh --nodeps $(repoquery --location --archlist=$(arch) redhat-lsb-core) && \
     yum clean all
+
+# Copy the `lsb_release` script to the standard location.
+# This was taken verbatim from the `redhat-lsb-core` RPM.
+COPY lsb_release /usr/bin/lsb_release
+RUN echo "LSB_VERSION=base-4.0-amd64:base-4.0-noarch:core-4.0-amd64:core-4.0-noarch" > /etc/lsb-release
 
 # Install devtoolset 2.
 RUN yum update -y && \
