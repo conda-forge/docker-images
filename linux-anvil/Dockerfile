@@ -21,6 +21,7 @@ RUN yum update -y && \
                    sudo \
                    tar \
                    which \
+                   xorg-x11-server-Xvfb \
                    libXext-devel \
                    libXrender-devel \
                    libSM-devel \
