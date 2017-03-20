@@ -20,6 +20,8 @@ RUN yum update -y && \
                    patch \
                    sudo \
                    tar \
+                   zip \
+                   unzip \
                    which \
                    libXext-devel \
                    libXrender-devel \
