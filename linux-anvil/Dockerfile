@@ -28,17 +28,15 @@ RUN yum update -y && \
                    mesa-libGL-devel && \
     yum clean all
 
-# Install devtoolset 2.
+# Install devtoolset 4.
 RUN yum update -y && \
     yum install -y \
                    centos-release-scl \
-                   yum-utils && \
-    yum-config-manager --add-repo http://people.centos.org/tru/devtools-2/devtools-2.repo && \
     yum update -y && \
     yum install -y \
-                   devtoolset-2-binutils \
-                   devtoolset-2-gcc \
-                   devtoolset-2-gcc-c++ && \
+                   devtoolset-4-binutils \
+                   devtoolset-4-gcc \
+                   devtoolset-4-gcc-c++ && \
     yum clean all
 
 # Install gosu to be used in the entrypoint, reason why to use it instead of

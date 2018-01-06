@@ -5,7 +5,7 @@
 # This is a problem for many reasons. One being
 # that the Python scripts used to activate the
 # toolset are not Python 3 compatible.
-. scl_source enable devtoolset-2
+. scl_source enable devtoolset-4
 
 # Activate the `root` conda environment.
 . /opt/conda/bin/activate root
