@@ -11,7 +11,8 @@ export LOGNAME=conda
 export MAIL=/var/spool/mail/conda
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/conda/bin
 chown -R conda /opt/conda
-cp /root/.condarc $HOME/.condarc && chown conda $HOME/.condarc
+cp /root/.condarc $HOME/.condarc
+chown -R conda $HOME
 
 # Source everything that needs to be.
 . /opt/docker/bin/entrypoint_source
