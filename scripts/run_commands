@@ -2,6 +2,8 @@
 
 set -exo pipefail
 
+export pyver="3.6"
+
 if [ "$(uname -m)" = "x86_64" ]; then
    export supkg="gosu"
    export condapkg="Miniconda3-4.5.4-Linux-x86_64.sh"
@@ -30,8 +32,11 @@ conda config --add channels conda-forge
 conda update --all --yes
 conda clean -tipy
 
+# Install common Python tools.
+conda install --yes --quiet python="${pyver}" pip setuptools
+
 # Install conda build and deployment tools.
-conda install --yes --quiet conda-build anaconda-client jinja2 setuptools
+conda install --yes --quiet conda-build anaconda-client jinja2
 conda install --yes git
 conda clean -tipsy
 
