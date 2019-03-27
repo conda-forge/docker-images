@@ -34,7 +34,7 @@ RUN source /opt/conda/etc/profile.d/conda.sh && \
         defaults::binutils_impl_linux-64 \
         defaults::binutils_linux-64 \
         defaults::gcc_impl_linux-64 \
-        defaults::gcc_linux-64 \
+        conda-forge::gcc_linux-64 \
         defaults::gfortran_impl_linux-64 \
         defaults::gfortran_linux-64 \
         defaults::gxx_impl_linux-64 \
