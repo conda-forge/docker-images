@@ -5,6 +5,7 @@ set -xeuo pipefail
 FEEDSTOCK_ROOT=$(cd "$(dirname "$0")/.."; pwd;)
 
 docker info
+docker history "$( docker images -q "condaforge/${DOCKERIMAGE}" )"
 
 # In order for the conda-build process in the container to write to the mounted
 # volumes, we need to run with the same id as the host machine, which is

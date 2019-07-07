@@ -35,6 +35,7 @@ RUN rpm -e --nodeps --verbose gcc gcc-c++
 RUN yum update -y && \
     yum install -y \
         bzip2 \
+        findutils \
         sudo \
         tar \
         which && \
@@ -61,9 +62,9 @@ RUN source /opt/conda/etc/profile.d/conda.sh && \
         defaults::libgfortran-ng \
         defaults::libstdcxx-ng && \
     conda remove --yes --quiet -n test --all && \
-    conda clean -tsy && \
-    chgrp -R lucky /opt/conda && \
-    chmod -R g=u /opt/conda
+    conda clean -tiy && \
+    : 'Find files that are not already in group "lucky" and change their group and mode.' && \
+    find /opt/conda ! -group lucky -exec chgrp -h lucky {} + -exec chmod u=g {} +
 
 # Download and cache CUDA related packages.
 RUN source /opt/conda/etc/profile.d/conda.sh && \
@@ -72,9 +73,9 @@ RUN source /opt/conda/etc/profile.d/conda.sh && \
         defaults::cudatoolkit=${CUDA_VER} \
         defaults::cudnn && \
     conda remove --yes --quiet -n test --all && \
-    conda clean -tsy && \
-    chgrp -R lucky /opt/conda && \
-    chmod -R g=u /opt/conda
+    conda clean -tiy && \
+    : 'Find files that are not already in group "lucky" and change their group and mode.' && \
+    find /opt/conda ! -group lucky -exec chgrp -h lucky {} + -exec chmod u=g {} +
 
 # Add a file for users to source to activate the `conda`
 # environment `base`. Also add a file that wraps that for
