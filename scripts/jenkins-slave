@@ -1,4 +1,4 @@
-#!/bin/bash -il
+#!/opt/conda/bin/bash -il
 
 # The MIT License
 #

@@ -11,7 +11,7 @@ chmod 755 /usr/share/jenkins
 chmod 644 /usr/share/jenkins/slave.jar
 
 groupadd -g ${gid} ${group}
-useradd --shell /bin/bash -c 'Jenkins user' -G lucky -u ${uid} -g ${gid} -m ${user}
+useradd --shell /opt/conda/bin/bash -c 'Jenkins user' -G lucky -u ${uid} -g ${gid} -m ${user}
 
 mkdir /home/${user}/.jenkins
 mkdir /home/${user}/agent

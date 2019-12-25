@@ -1,4 +1,4 @@
-#!/bin/bash -il
+#!/bin/sh -il
 
 set -exo pipefail
 
@@ -36,11 +36,11 @@ echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
 curl -s -L $condapkg > miniconda.sh
 md5sum miniconda.sh | grep $conda_chksum
 
-bash miniconda.sh -b -p /opt/conda
+sh miniconda.sh -b -p /opt/conda
 rm -f miniconda.sh
 touch /opt/conda/conda-meta/pinned
 ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
-source /opt/conda/etc/profile.d/conda.sh
+. /opt/conda/etc/profile.d/conda.sh
 conda activate
 conda config --set show_channel_urls True
 conda config ${additional_channel} --add channels conda-forge
@@ -50,7 +50,7 @@ conda clean -tipy
 
 # Install conda build and deployment tools.
 conda install --yes --quiet \
-    git patch \
+    bash git patch \
     python=3.7 setuptools conda-build anaconda-client
 conda clean -tipy
 

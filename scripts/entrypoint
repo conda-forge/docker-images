@@ -1,4 +1,4 @@
-#!/bin/bash -il
+#!/opt/conda/bin/bash -il
 
 # Use non-interactive cp
 unalias cp
@@ -6,7 +6,7 @@ unalias cp
 # to mounted volumes
 # Adapted from https://denibertovic.com/posts/handling-permissions-with-docker-volumes/
 USER_ID=${HOST_USER_ID:-9001}
-useradd --shell /bin/bash -u $USER_ID -G lucky -o -c "" -m conda
+useradd --shell /opt/conda/bin/bash -u $USER_ID -G lucky -o -c "" -m conda
 export HOME=/home/conda
 export USER=conda
 export LOGNAME=conda

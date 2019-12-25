@@ -35,7 +35,7 @@ RUN /opt/docker/bin/run_commands
 # Download and cache new compiler packages.
 # Should speedup installation of them on CIs.
 ENV _channel="c4aarch64"
-RUN source /opt/conda/etc/profile.d/conda.sh && \
+RUN . /opt/conda/etc/profile.d/conda.sh && \
     conda activate && \
     conda create -n test --yes --quiet --download-only \
         $_channel::binutils_impl_linux-aarch64 \
@@ -64,4 +64,4 @@ COPY scripts/entrypoint /opt/docker/bin/entrypoint
 # Activate the `conda` environment `base` and the devtoolset compiler.
 # Provide a default command (`bash`), which will start if the user doesn't specify one.
 ENTRYPOINT [ "/opt/conda/bin/tini", "--", "/opt/docker/bin/entrypoint" ]
-CMD [ "/bin/bash" ]
+CMD [ "/opt/conda/bin/bash" ]

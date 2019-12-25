@@ -3,12 +3,12 @@ FROM @BASE_IMAGE@
 #
 # Fix a few things for Conda
 RUN { \
-      echo '#!/bin/bash'; \
+      echo '#!/opt/conda/bin/bash'; \
       echo 'set -ex'; \
       echo 'cp /root/.condarc /opt/conda'; \
-      echo 'source /etc/profile.d/conda.sh';  \
+      echo '. /etc/profile.d/conda.sh';  \
       echo 'conda config --system --set always_copy True'; \
-      echo 'echo "source /etc/profile.d/conda.sh" >> /etc/skel/.bashrc'; \
+      echo 'echo ". /etc/profile.d/conda.sh" >> /etc/skel/.bashrc'; \
     } > /tmp/conda-fix-jenkins.sh \
     && chmod +x /tmp/conda-fix-jenkins.sh \
     && /tmp/conda-fix-jenkins.sh
