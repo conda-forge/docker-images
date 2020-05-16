@@ -21,6 +21,12 @@ ENV CUDA_HOME /usr/local/cuda
 # github.com/conda-forge/conda-forge-ci-setup-feedstock/blob/master/recipe/run_conda_forge_build_setup_linux
 RUN echo "$CUDA_HOME/compat" >> /etc/ld.so.conf.d/cuda-$CUDA_VER.conf && \
     ldconfig
+# to do this, we need to enable the conda-user (added in scripts/entrypoint) to perform
+# those specific tasks within conda-forge-ci-setup-feedstock that require root privileges
+RUN if [ ${CUDA_VER} == "9.2" ]; then \
+        echo "conda ALL=NOPASSWD: /bin/mv /usr/local/cuda-10.0/* /usr/local/cuda-9.2" >> /etc/sudoers && \
+        echo "conda ALL=NOPASSWD: /bin/rm -rf /usr/local/cuda-10.0" >> /etc/sudoers; \
+    fi
 
 # Add a timestamp for the build. Also, bust the cache.
 ADD http://worldclockapi.com/api/json/utc/now /opt/docker/etc/timestamp
