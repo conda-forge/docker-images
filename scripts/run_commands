@@ -16,12 +16,6 @@ elif [ "$(uname -m)" = "aarch64" ]; then
    export supkg="su-exec"
    export condapkg="https://github.com/conda-forge/miniforge/releases/download/4.8.3-0/Miniforge3-4.8.3-0-Linux-aarch64.sh"
    export conda_chksum="359fa54c375d1af3dd21d76aa8a64f800347d3b3a6e53d3b37dcdd88b4a2e7b6"
-elif [ "$(uname -m)" = "armv7l" ]; then
-   export supkg="su-exec"
-   export condapkg="https://github.com/jjhelmus/conda4armv7l/releases/download/1.0.0/conda4armv7l_installer-1.0.0-Linux-armv7l.sh"
-   export conda_chksum="91471e99c090867f242f377b10470a4e8debd6e8af1007da3e692782b8e8b83f"
-   # defaults is not enough
-   export additional_channel="--add channels c4armv7l"
 else
    exit 1
 fi
