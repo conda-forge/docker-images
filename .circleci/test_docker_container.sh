@@ -14,6 +14,14 @@ touch /opt/conda/bin/test_conda_forge
 # check that conda is activated
 conda info
 
+# check that conda version matches
+IFS='-' read -ra miniforge_version_array <<< "$MINIFORGE_VERSION"
+conda_version=${`conda --version`/conda /""}
+if [[ "${miniforge_version_array[0]}" != "${conda_version}" ]]
+ then
+  exit 1
+fi
+
 # show all packages installed in root
 conda list
 
