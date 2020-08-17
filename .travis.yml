@@ -128,7 +128,7 @@ before_install:
 
 install:
     - |
-      if [[ $DOCKERTAGSUFFIX == "jnlp-slave" ]]
+      if [[ $DOCKERLATESTTAG == "jnlp-slave" ]]
       then
         sed "s|@BASE_IMAGE@|condaforge/${DOCKERIMAGE}|" jnlp-slave/Dockerfile.in > $DOCKERIMAGE/Dockerfile
       fi
@@ -136,7 +136,7 @@ install:
 
 script:
     - |
-      if [[ $DOCKERTAGSUFFIX != "jnlp-slave" ]]
+      if [[ $DOCKERLATESTTAG != "jnlp-slave" ]]
       then
         ./.circleci/run_docker_build.sh
       fi
