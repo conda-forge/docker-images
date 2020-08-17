@@ -5,85 +5,106 @@ matrix:
     - os: linux
       env:
         - DOCKERIMAGE=linux-anvil-comp7
+        - DOCKERLATESTTAG=latest
 
     - os: linux
       env:
         - DOCKERIMAGE=linux-anvil-comp7
-        - DOCKERTAGSUFFIX=jnlp-slave
+        - DOCKERLATESTTAG=jnlp-slave
 
     - os: linux
       env:
         - DOCKERIMAGE=linux-anvil-cos7-x86_64
+        - DOCKERLATESTTAG=latest
 
     - os: linux
       env:
         - DOCKERIMAGE=linux-anvil-ppc64le
+        - DOCKERLATESTTAG=latest
 
     - os: linux
       env:
         - DOCKERIMAGE=linux-anvil-aarch64
+        - DOCKERLATESTTAG=latest
 
     - os: linux
       env:
         - DOCKERIMAGE=linux-anvil-cuda
-        - DOCKERTAGSUFFIX=9.2
+        - DOCKERLATESTTAG=9.2
         - CUDA_VER=9.2
 
     - os: linux
       env:
         - DOCKERIMAGE=linux-anvil-cuda
-        - DOCKERTAGSUFFIX=10.0
+        - DOCKERLATESTTAG=10.0
         - CUDA_VER=10.0
 
     - os: linux
       env:
         - DOCKERIMAGE=linux-anvil-cuda
-        - DOCKERTAGSUFFIX=10.1
+        - DOCKERLATESTTAG=10.1
         - CUDA_VER=10.1
 
     - os: linux
       env:
         - DOCKERIMAGE=linux-anvil-cuda
-        - DOCKERTAGSUFFIX=10.2
+        - DOCKERLATESTTAG=10.2
         - CUDA_VER=10.2
 
     - os: linux
       env:
         - DOCKERIMAGE=miniforge3
+        - DOCKERLATESTTAG=latest
 
     - os: linux
       env:
         - DOCKERIMAGE=linux-anvil-ppc64le-cuda
-        - DOCKERTAGSUFFIX=9.2
+        - DOCKERLATESTTAG=9.2
         - CUDA_VER=9.2
 
     - os: linux
       env:
         - DOCKERIMAGE=linux-anvil-ppc64le-cuda
-        - DOCKERTAGSUFFIX=10.0
+        - DOCKERLATESTTAG=10.0
         - CUDA_VER=10.0
 
     - os: linux
       env:
         - DOCKERIMAGE=linux-anvil-ppc64le-cuda
-        - DOCKERTAGSUFFIX=10.1
+        - DOCKERLATESTTAG=10.1
         - CUDA_VER=10.1
 
     - os: linux
       env:
         - DOCKERIMAGE=linux-anvil-ppc64le-cuda
-        - DOCKERTAGSUFFIX=10.2
+        - DOCKERLATESTTAG=10.2
         - CUDA_VER=10.2
 
 env:
   global:
-    - MINIFORGE_VERSION="4.8.3-0"
+    - RELEASE_CONDA_VERSION=4.8.3
+    - RELEASE_BUILD_NUM=0
     secure: "nM8OaFilQkH14wzD1S6DTGejjo3yL/q/1dpz7144Kw68s8FVqW0zsxCC6960ieokY2LutGSv16qTiIFxnRZnHPCXt7X2MhxcagX8IcMu62DWe2jgqwho0hPI65N/bQYLW1l23e9tjKQxWFZopM4Oyzm6TBqlzibTdbPuQI+YB3RBY0dlkIlupPIYtiNlLRR/HnOyyUny/hg3Z65GWeVpXhiMPqXLlfliTiQ31JgBaNuXiP3/ruSCDeyRPWx62IcPGJ1xVSXL3tvkEI2TpGVCsraKCSbgINhm3AHjQ+8ST6GPMxaOaHrKZzssKJpsZhz1dzWINXTLOQ5LrKtBVwfaevFxDmPEr9RcVlzwAAyuWugCyV4Z6NSt/j2Qqw5qGaiiDHyBH0FMmBgzlPzLZ4JKFsZ68aRkc2qV0MeN0YJRwcQ0EnXRULrcwReBztDHZwixSxqlPpQUwbRr7ne05rBjVoMTKaEhyHPO+KYSwQB1wiQgILBtlP/5ofsYc9Eb46m5JJJhJxuLythKpW9mMqd/US4rQrgEHQ/QRIRYwzGnKf/5WXV3W2o4C9QZpH5Da3J7jOLlqxIY5I+Dv9eEk7XxhT7UaEo7C9tmzjaL2D0yrzPnOnPQhMpmCVNWqdTp1eLcIASKSPbmzz8MuYB5yg48wjXWvDIRBQ6hJyuKHhNGE9k="
 
 before_install:
+    # Define the versioned tag
+    - |
+      if [ "$DOCKERLATESTTAG" != "latest" ]; then
+        export DOCKERVERSIONTAG=$RELEASE_CONDA_VERSION-$DOCKERLATESTTAG-$RELEASE_BUILD_NUM
+      else
+        export DOCKERVERSIONTAG=$RELEASE_CONDA_VERSION-$RELEASE_BUILD_NUM
+      fi
+
     # Enable experimental features (needed for squash)
     - sudo cp docker_daemon_config.json /etc/docker/daemon.json
     - sudo service docker restart
+
+    # Fail build is versioned tag already exists (forgot to bump version or build num?)
+    - |
+      if DOCKER_CLI_EXPERIMENTAL=enabled docker manifest inspect condaforge/$DOCKERIMAGE:$DOCKERVERSIONTAG >/dev/null;
+        echo "Versioned tag already exists!"
+        exit 1
+      fi
 
     - docker info
     - |
@@ -111,8 +132,7 @@ install:
       then
         sed "s|@BASE_IMAGE@|condaforge/${DOCKERIMAGE}|" jnlp-slave/Dockerfile.in > $DOCKERIMAGE/Dockerfile
       fi
-    - export DOCKERTAG=$MINIFORGE_VERSION-$DOCKERTAGSUFFIX
-    - docker build --build-arg CUDA_VER -t condaforge/$DOCKERIMAGE:$DOCKERTAG -t condaforge/$DOCKERIMAGE:latest -f $DOCKERIMAGE/Dockerfile --no-cache --squash .
+    - docker build --build-arg CUDA_VER -t condaforge/$DOCKERIMAGE:DOCKERVERSIONTAG -t condaforge/$DOCKERIMAGE:$DOCKERLATESTTAG -f $DOCKERIMAGE/Dockerfile --no-cache --squash .
 
 script:
     - |
@@ -124,7 +144,6 @@ script:
 deploy:
   provider: script
   script: |
-          export DOCKERTAG=$MINIFORGE_VERSION-$DOCKERTAGSUFFIX &&
           docker login -u condaforgebot -p $DH_PASSWORD &&
-          docker push condaforge/$DOCKERIMAGE:$DOCKERTAG &&
-          docker push condaforge/$DOCKERIMAGE:latest
+          docker push condaforge/$DOCKERIMAGE:$DOCKERVERSIONTAG &&
+          docker push condaforge/$DOCKERIMAGE:$DOCKERLATESTTAG
