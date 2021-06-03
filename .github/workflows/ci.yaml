@@ -30,6 +30,10 @@ jobs:
           DOCKERTAG: latest
           CENTOS_VER: "7"
 
+        - DOCKERIMAGE: linux-anvil-aarch64
+          DOCKERTAG: "centos8"
+          CENTOS_VER: "8"
+
         - DOCKERIMAGE: linux-anvil-cuda
           DOCKERTAG: "9.2"
           CUDA_VER: "9.2"

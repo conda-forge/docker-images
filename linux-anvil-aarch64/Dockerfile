@@ -16,12 +16,28 @@ ENV LANGUAGE=en_US.UTF-8
 ADD https://loripsum.net/api /opt/docker/etc/gibberish
 
 # Resolves a nasty NOKEY warning that appears when using yum.
-RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${CENTOS_VER} && \
-    rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${CENTOS_VER}-aarch64
+RUN if [ "$(rpm --eval %{centos_ver})" = "7" ]; then \
+      rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${CENTOS_VER} && \
+      rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${CENTOS_VER}-aarch64; \
+    elif [ "$(rpm --eval %{centos_ver})" = "8" ]; then \
+      rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial; \
+    else \
+      echo "Unsupported centos version" && \
+      exit 1; \
+    fi
 
-# (arm64v8/centos:7 only) Fix language override to get a working en_US.UTF-8 locale; backports:
+# (arm64v8/centos:7) Fix language override to get a working en_US.UTF-8 locale; backports:
 # https://github.com/CentOS/sig-cloud-instance-build/commit/2892c17fa8a520e58c3f42cd56587863fe675670
-RUN sed -i 's/override_install_langs=en_US\.UTF-8/override_install_langs=en_US.utf8/' /etc/yum.conf
+# (arm64v8/centos:8) Install glibc-langpack-en package to get a working en_US.UTF-8 locale
+RUN if [ "$(rpm --eval %{centos_ver})" = "7" ]; then \
+      sed -i 's/override_install_langs=en_US\.UTF-8/override_install_langs=en_US.utf8/' /etc/yum.conf; \
+    elif [ "$(rpm --eval %{centos_ver})" = "8" ]; then \
+      yum install -y glibc-langpack-en; \
+    else \
+      echo "Unsupported centos version" && \
+      exit 1; \
+    fi
+
 # Install basic requirements.
 COPY scripts/yum_clean_all /opt/docker/bin/
 RUN yum update -y && \
