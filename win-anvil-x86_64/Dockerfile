@@ -4,8 +4,26 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2019
 
 SHELL ["cmd", "/S", "/C"]
 
-WORKDIR C:/Users/Administrator
+WORKDIR C:/Users/ContainerAdministrator
 
+RUN powershell -Command " \
+    $url = \"https://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86_64.exe\"; \
+    $client = new-object System.Net.WebClient; \
+    $client.DownloadFile( $url, \"miniconda3.exe\"); \
+    ./miniconda3.exe /S /D=C:\Users\ContainerAdministrator\miniconda3 | Write-Output; \
+    del miniconda3.exe; \
+    ./miniconda3/Scripts/conda clean --all -y; \
+    "
+
+RUN miniconda3\Scripts\activate.bat && \
+    conda config --add channels conda-forge && \
+    conda install -y conda-build git && \
+    conda config --set always_yes true && \
+    conda config --set anaconda_upload false
+
+CMD cmd.exe /k miniconda3\Scripts\activate.bat
+
+# Put the Visual Studio layer last because it is the most annoying to redo.
 # Exported from Visual Studio Installer GUI, this config file is used to
 # explicitly list out which MSVC components are installed. Component names are
 # also documented here:
@@ -20,22 +38,5 @@ RUN powershell -Command " \
     ./msvc_build_tools.exe --quiet --wait --norestart --nocache --config C:\TEMP\.vsconfig | Write-Output; \
     Start-Sleep -s 20; \
     del msvc_build_tools.exe; \
+    Remove-Item $env:TEMP\* -Recurse; \
     "
-
-RUN powershell -Command " \
-    $url = \"https://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86_64.exe\"; \
-    $client = new-object System.Net.WebClient; \
-    $client.DownloadFile( $url, \"miniconda3.exe\"); \
-    ./miniconda3.exe /S /D=C:\Users\Administrator\miniconda3 | Write-Output; \
-    del miniconda3.exe; \
-    ./miniconda3/Scripts/conda clean --all -y; \
-    "
-
-RUN miniconda3\Scripts\activate.bat && \
-    conda config --add channels conda-forge && \
-    conda install -y conda-build git && \
-    conda config --set always_yes true && \
-    conda config --set anaconda_upload false
-
-CMD cmd.exe /k miniconda3\Scripts\activate.bat
-
