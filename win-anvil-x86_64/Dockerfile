@@ -17,7 +17,7 @@ RUN powershell -Command " \
 
 RUN miniconda3\Scripts\activate.bat && \
     conda config --add channels conda-forge && \
-    conda install -y conda-build git && \
+    conda install -y conda-build git mamba boa && \
     conda config --set always_yes true && \
     conda config --set anaconda_upload false
 
@@ -32,7 +32,7 @@ ADD .vsconfig "C:\\TEMP\\.vsconfig"
 
 # Be patient, this takes quite a while and you see no action.
 RUN powershell -Command " \
-    $url = \"https://aka.ms/vs/17/release/vs_buildtools.exe\"; \
+    $url = \"https://aka.ms/vs/15/release/vs_buildtools.exe\"; \
     $client = new-object System.Net.WebClient; \
     $client.DownloadFile( $url, \"msvc_build_tools.exe\"); \
     ./msvc_build_tools.exe --quiet --wait --norestart --nocache --config C:\TEMP\.vsconfig | Write-Output; \
