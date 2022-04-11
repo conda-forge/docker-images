@@ -4,13 +4,13 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2019
 
 SHELL ["cmd", "/S", "/C"]
 
-WORKDIR C:/Users/ContainerAdministrator
+WORKDIR C:/Users/Administrator
 
 RUN powershell -Command " \
     $url = \"https://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86_64.exe\"; \
     $client = new-object System.Net.WebClient; \
     $client.DownloadFile( $url, \"miniconda3.exe\"); \
-    ./miniconda3.exe /S /D=C:\Users\ContainerAdministrator\miniconda3 | Write-Output; \
+    ./miniconda3.exe /S /D=C:\Users\Administrator\miniconda3 | Write-Output; \
     del miniconda3.exe; \
     ./miniconda3/Scripts/conda clean --all -y; \
     "
