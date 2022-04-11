@@ -19,24 +19,28 @@ RUN miniconda3\Scripts\activate.bat && \
     conda config --add channels conda-forge && \
     conda install -y conda-build git mamba boa && \
     conda config --set always_yes true && \
-    conda config --set anaconda_upload false
+    conda config --set anaconda_upload false && \
+    conda update --all -n base --yes && \
+    conda clean --all --yes
 
 CMD cmd.exe /k miniconda3\Scripts\activate.bat
 
-# Put the Visual Studio layer last because it is the most annoying to redo.
-# Exported from Visual Studio Installer GUI, this config file is used to
-# explicitly list out which MSVC components are installed. Component names are
-# also documented here:
-# https://docs.microsoft.com/en-us/visualstudio/install/workload-component-id-vs-build-tools
-ADD .vsconfig "C:\\TEMP\\.vsconfig"
+ARG VS_MAJOR="15"
+ENV VS_MAJOR=$VS_MAJOR
 
+# Put the Visual Studio layer last because it is the most annoying to redo.
 # Be patient, this takes quite a while and you see no action.
+# Component names are documented here:
+# https://docs.microsoft.com/en-us/visualstudio/install/workload-component-id-vs-build-tools
 # https://docs.microsoft.com/en-us/visualstudio/install/use-command-line-parameters-to-install-visual-studio?view=vs-2017
 RUN powershell -Command " \
-    $url = \"https://aka.ms/vs/15/release/vs_buildtools.exe\"; \
+    $url = \"https://aka.ms/vs/$env:VS_MAJOR/release/vs_buildtools.exe\"; \
     $client = new-object System.Net.WebClient; \
     $client.DownloadFile( $url, \"msvc_build_tools.exe\"); \
-    ./msvc_build_tools.exe --quiet --wait --norestart --nocache --config C:\TEMP\.vsconfig | Write-Output; \
+    ./msvc_build_tools.exe --quiet --wait --norestart --nocache \
+    --add Microsoft.VisualStudio.Workload.VCTools \
+    --add Microsoft.VisualStudio.Component.VC.CMake.Project \
+    | Write-Output; \
     Start-Sleep -s 20; \
     del msvc_build_tools.exe; \
     Remove-Item $env:TEMP\* -Recurse; \
