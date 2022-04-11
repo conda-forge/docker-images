@@ -31,6 +31,7 @@ CMD cmd.exe /k miniconda3\Scripts\activate.bat
 ADD .vsconfig "C:\\TEMP\\.vsconfig"
 
 # Be patient, this takes quite a while and you see no action.
+# https://docs.microsoft.com/en-us/visualstudio/install/use-command-line-parameters-to-install-visual-studio?view=vs-2017
 RUN powershell -Command " \
     $url = \"https://aka.ms/vs/15/release/vs_buildtools.exe\"; \
     $client = new-object System.Net.WebClient; \
