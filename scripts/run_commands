@@ -51,9 +51,9 @@ mamba install --yes --quiet \
     pip \
     conda-build \
     boa \
-    anaconda-client \
-    su-exec \
-    tini
+    anaconda-client
+#    su-exec \
+#    tini
 
 # Clean to reduce image size
 conda clean -tipy
