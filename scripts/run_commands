@@ -5,15 +5,15 @@ set -exo pipefail
 export additional_channel="--add channels defaults"
 
 export miniforge_arch="$(uname -m)"
-export miniforge_version="4.14.0-0"
+export miniforge_version="4.14.0-1"
 export python_version="3.10"  # should match the one provided in mambaforge
 export condapkg="https://github.com/conda-forge/miniforge/releases/download/${miniforge_version}/Mambaforge-${miniforge_version}-Linux-${miniforge_arch}.sh"
 if [ "$(uname -m)" = "x86_64" ]; then
-   export conda_chksum="d47b78b593e3cf5513bafbfa6a51eafcd9f0e164c41c79c790061bb583c82859"
+   export conda_chksum="d9c8337bda234cf53d2743f32efaab41cbc9d942b8fb52b8588996ef0300c82f"
 elif [ "$(uname -m)" = "ppc64le" ]; then
-   export conda_chksum="607bbd38aa21af4c79a663f2a183a06cca054efdd8d617c17370522504c7be1e"
+   export conda_chksum="da6cbf1abe89fae4e1246aa64e86e8e155e7938c462f968265266af61fda64cc"
 elif [ "$(uname -m)" = "aarch64" ]; then
-   export conda_chksum="37221b8d818951fab125c0bfb6cc6e83dac059f66892d2544a83192828d8e2c4"
+   export conda_chksum="f721dc44d5aba7a24c6f76408979d125e7ed7f1ba56397ff073a9cfd1611f71c"
 else
    exit 1
 fi
