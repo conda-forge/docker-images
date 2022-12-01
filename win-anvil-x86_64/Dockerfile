@@ -17,6 +17,7 @@ RUN powershell -Command " \
 
 RUN miniconda3\Scripts\activate.bat && \
     conda config --add channels conda-forge && \
+    conda config --remove channels defaults && \
     conda install -y conda-build git mamba boa && \
     conda config --set always_yes true && \
     conda config --set anaconda_upload false && \
