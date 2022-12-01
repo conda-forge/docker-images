@@ -38,9 +38,18 @@ RUN powershell -Command " \
     $url = \"https://aka.ms/vs/$env:VS_MAJOR/release/vs_buildtools.exe\"; \
     $client = new-object System.Net.WebClient; \
     $client.DownloadFile( $url, \"msvc_build_tools.exe\"); \
-    ./msvc_build_tools.exe --quiet --wait --norestart --nocache \
-    --add Microsoft.VisualStudio.Workload.VCTools \
+    ./msvc_build_tools.exe --quiet --wait --nocache \
+    --add Microsoft.Component.MSBuild \
+    --add Microsoft.VisualStudio.Component.CoreBuildTools \
+    --add Microsoft.VisualStudio.Component.Roslyn.Compiler \
+    --add Microsoft.VisualStudio.Component.Static.Analysis.Tools \
     --add Microsoft.VisualStudio.Component.VC.CMake.Project \
+    --add Microsoft.VisualStudio.Component.VC.CoreBuildTools \
+    --add Microsoft.VisualStudio.Component.VC.Redist.14.Latest \
+    --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
+    --add Microsoft.VisualStudio.Component.Windows10SDK \
+    --add Microsoft.VisualStudio.Workload.MSBuildTools \
+    --add Microsoft.VisualStudio.Workload.VCTools \
     | Write-Output; \
     Start-Sleep -s 20; \
     del msvc_build_tools.exe; \
