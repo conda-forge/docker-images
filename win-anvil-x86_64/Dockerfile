@@ -26,7 +26,7 @@ RUN miniconda3\Scripts\activate.bat && \
 
 CMD cmd.exe /k miniconda3\Scripts\activate.bat
 
-ARG VS_MAJOR="15"
+ARG VS_MAJOR="16"
 ENV VS_MAJOR=$VS_MAJOR
 
 # Put the Visual Studio layer last because it is the most annoying to redo.
