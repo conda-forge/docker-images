@@ -41,6 +41,7 @@ source /opt/conda/etc/profile.d/conda.sh
 conda activate
 conda config --set show_channel_urls True
 conda config --set channel_priority strict
+conda config --set solver libmamba
 conda config ${additional_channel} --add channels conda-forge
 conda config --show-sources
 
