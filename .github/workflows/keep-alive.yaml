@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: gautamkrishnar/keepalive-workflow@6c724fb8c67c9bd5cd7cb4ea58ddbdf06ed53063
+      - uses: gautamkrishnar/keepalive-workflow@60b13c92aeda855e493b83aaf482c25da7e0043b
         with:
           commit_message: "Ah ah ah, stayin' alive"
           committer_username: conda-forge-bot
