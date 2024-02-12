@@ -9,6 +9,10 @@ on:
     - cron: "0 6 * * SUN"  # Once weekly on Sunday @ 0600 UTC
   workflow_dispatch: null
 
+env:
+  REGISTRY_DH: docker.io/condaforge
+  REGISTRY_QUAY: quay.io/condaforge
+  
 jobs:
   build:
     name: ${{ matrix.cfg.DOCKERIMAGE }}:${{ matrix.cfg.DOCKERTAG }} (${{ matrix.cfg.DISTRO_ARCH }})
@@ -253,6 +257,8 @@ jobs:
             --build-arg DISTRO_NAME \
             --build-arg DISTRO_VER \
             -t condaforge/$DOCKERIMAGE:$DOCKERTAG \
+            -t ${{ env.REGISTRY_DH }}/$DOCKERIMAGE:$DOCKERTAG \
+            -t ${{ env.REGISTRY_QUAY }}/$DOCKERIMAGE:$DOCKERTAG \
             -f ${DOCKERFILE:-${DOCKERIMAGE}}/Dockerfile \
             --no-cache --squash .
 
@@ -260,10 +266,87 @@ jobs:
         run: |
           ./.circleci/run_docker_build.sh
 
-      - name: Deploy
+      - name: Deploy images
         if: github.ref == 'refs/heads/main' && github.repository == 'conda-forge/docker-images'
         env:
+          CFD_QUAY_USER: conda_forge_daemon
           CFD_QUAY_PASSWORD: ${{ secrets.CFD_QUAY_PASSWORD }}
+          DH_USER: condaforgebot
           DH_PASSWORD: ${{ secrets.DH_PASSWORD }}
         run: |
           ./scripts/deploy
+  
+  build-manifest:
+    needs: [build]
+    if: github.ref == 'refs/heads/main' && github.repository == 'conda-forge/docker-images'
+    name: ${{ matrix.docker-registry }}/${{ matrix.cfg.DOCKER_MANIFEST }}:${{ matrix.cfg.DOCKER_TAG }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        docker-registry: [docker.io/condaforge, quay.io/condaforge]
+        cfg:
+          - DOCKER_MANIFEST: linux-anvil-cos7
+            DOCKER_TAG: "latest"
+            DOCKER_IMAGES: "<<ORG>>/linux-anvil-cos7-x86_64:<<TAG>>,<<ORG>>/linux-anvil-ppc64le:<<TAG>>,<<ORG>>/linux-anvil-aarch64:<<TAG>>"
+          - DOCKER_MANIFEST: linux-anvil-alma
+            DOCKER_TAG: "8"
+            DOCKER_IMAGES: "<<ORG>>/linux-anvil-alma-x86_64:<<TAG>>,<<ORG>>/linux-anvil-alma-ppc64le:<<TAG>>,<<ORG>>/linux-anvil-alma-aarch64:<<TAG>>"
+          - DOCKER_MANIFEST: linux-anvil-ubi-cuda
+            DOCKER_TAG: "11.0"
+            DOCKER_IMAGES: "<<ORG>>/linux-anvil-cuda:<<TAG>>,<<ORG>>/linux-anvil-ppc64le-cuda:<<TAG>>,<<ORG>>/linux-anvil-aarch64-cuda:<<TAG>>"
+          - DOCKER_MANIFEST: linux-anvil-cos7-cuda
+            DOCKER_IMAGES: "<<ORG>>/linux-anvil-cuda:<<TAG>>,<<ORG>>/linux-anvil-ppc64le-cuda:<<TAG>>,<<ORG>>/linux-anvil-aarch64-cuda:<<TAG>>"
+            DOCKER_TAG: "11.1"
+          - DOCKER_MANIFEST: linux-anvil-cos7-cuda
+            DOCKER_IMAGES: "<<ORG>>/linux-anvil-cuda:<<TAG>>,<<ORG>>/linux-anvil-ppc64le-cuda:<<TAG>>,<<ORG>>/linux-anvil-aarch64-cuda:<<TAG>>"
+            DOCKER_TAG: "11.2"
+          - DOCKER_MANIFEST: linux-anvil-cos7-cuda
+            DOCKER_IMAGES: "<<ORG>>/linux-anvil-cuda:<<TAG>>,<<ORG>>/linux-anvil-ppc64le-cuda:<<TAG>>,<<ORG>>/linux-anvil-aarch64-cuda:<<TAG>>"
+            DOCKER_TAG: "11.3"
+          - DOCKER_MANIFEST: linux-anvil-cos7-cuda
+            DOCKER_IMAGES: "<<ORG>>/linux-anvil-cuda:<<TAG>>,<<ORG>>/linux-anvil-ppc64le-cuda:<<TAG>>,<<ORG>>/linux-anvil-aarch64-cuda:<<TAG>>"
+            DOCKER_TAG: "11.4"
+          - DOCKER_MANIFEST: linux-anvil-cos7-cuda
+            DOCKER_IMAGES: "<<ORG>>/linux-anvil-cuda:<<TAG>>,<<ORG>>/linux-anvil-ppc64le-cuda:<<TAG>>,<<ORG>>/linux-anvil-aarch64-cuda:<<TAG>>"
+            DOCKER_TAG: "11.5"
+          - DOCKER_MANIFEST: linux-anvil-cos7-cuda
+            DOCKER_IMAGES: "<<ORG>>/linux-anvil-cuda:<<TAG>>,<<ORG>>/linux-anvil-ppc64le-cuda:<<TAG>>,<<ORG>>/linux-anvil-aarch64-cuda:<<TAG>>"
+            DOCKER_TAG: "11.6"
+          - DOCKER_MANIFEST: linux-anvil-cos7-cuda
+            DOCKER_IMAGES: "<<ORG>>/linux-anvil-cuda:<<TAG>>,<<ORG>>/linux-anvil-ppc64le-cuda:<<TAG>>,<<ORG>>/linux-anvil-aarch64-cuda:<<TAG>>"
+            DOCKER_TAG: "11.7"
+          - DOCKER_MANIFEST: linux-anvil-cos7-cuda
+            DOCKER_IMAGES: "<<ORG>>/linux-anvil-cuda:<<TAG>>,<<ORG>>/linux-anvil-ppc64le-cuda:<<TAG>>,<<ORG>>/linux-anvil-aarch64-cuda:<<TAG>>"
+            DOCKER_TAG: "11.8"
+ 
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Interpolate placeholders
+        id: interpolate
+        run: |
+          set -x
+          INTERPOLATED=`echo "${{ matrix.cfg.DOCKER_IMAGES }}" | sed "s#<<ORG>>#${{ matrix.docker-registry }}#g" | sed "s#<<TAG>>#${{ matrix.cfg.DOCKER_TAG }}#g"`
+          echo "DOCKER_IMAGES=${INTERPOLATED}" >> "$GITHUB_OUTPUT"
+
+      - name: Login to DockerHub registry
+        uses: docker/login-action@v2
+        with:
+          username: condaforgebot
+          password: ${{ secrets.DH_PASSWORD }}
+      
+      - name: Login to Quay.io registry
+        uses: docker/login-action@v2
+        with:
+          registry: quay.io
+          username: conda_forge_daemon
+          password: ${{ secrets.CFD_QUAY_PASSWORD }}
+    
+      - name: Push Docker manifest list for ${{ matrix.docker-registry }}
+        uses: Noelware/docker-manifest-action@v0.3.0
+        with:
+            inputs: ${{ matrix.docker-registry }}/${{ matrix.cfg.DOCKER_MANIFEST }}:${{ matrix.cfg.DOCKER_TAG }}
+            images: ${{ steps.interpolate.outputs.DOCKER_IMAGES }}
+            push: true
+          

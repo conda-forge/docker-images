@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # dockerhub
-docker login -u condaforgebot -p $DH_PASSWORD
-docker push condaforge/$DOCKERIMAGE:$DOCKERTAG
+docker login -u ${DH_USER} -p ${DH_PASSWORD}
+docker push ${REGISTRY_DH}/$DOCKERIMAGE:$DOCKERTAG
 
 # quay.io
-docker login -u conda_forge_daemon -p ${CFD_QUAY_PASSWORD} quay.io
-docker tag condaforge/$DOCKERIMAGE:$DOCKERTAG quay.io/condaforge/$DOCKERIMAGE:$DOCKERTAG
-docker push quay.io/condaforge/$DOCKERIMAGE:$DOCKERTAG
+docker login -u ${CFD_QUAY_USER} -p ${CFD_QUAY_PASSWORD} quay.io
+docker push ${REGISTRY_QUAY}/$DOCKERIMAGE:$DOCKERTAG
