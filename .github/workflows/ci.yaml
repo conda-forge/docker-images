@@ -267,3 +267,48 @@ jobs:
           DH_PASSWORD: ${{ secrets.DH_PASSWORD }}
         run: |
           ./scripts/deploy
+
+  build_win:
+    name: ${{ matrix.cfg.DOCKERIMAGE }}:${{ matrix.cfg.DOCKERTAG }}
+      runs-on: windows-2019
+      strategy:
+        fail-fast: false
+        matrix:
+          cfg:
+          - DOCKERIMAGE: win-anvil-x86_64
+            DOCKERTAG: "15"
+            VS_MAJOR: "15"
+          - DOCKERIMAGE: win-anvil-x86_64
+            DOCKERTAG: "16"
+            VS_MAJOR: "16"
+          - DOCKERIMAGE: win-anvil-x86_64
+            DOCKERTAG: "17"
+            VS_MAJOR: "17"
+
+    env:
+      DOCKERIMAGE: ${{ matrix.cfg.DOCKERIMAGE }}
+      DOCKERTAG: ${{ matrix.cfg.DOCKERTAG }}
+      VS_MAJOR: ${{ matrix.cfg.VS_MAJOR }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Docker info
+        run: |
+          docker info
+
+      - name: Build image
+        run: |
+          docker build \
+            --build-arg VS_MAJOR=%VS_MAJOR% \
+            -t condaforge/%DOCKERIMAGE%:%DOCKERTAG% \
+            -f %DOCKERIMAGE%/Dockerfile \
+            .
+
+      - name: Deploy
+        if: github.ref == 'refs/heads/main' && github.repository == 'conda-forge/docker-images'
+        env:
+          CFD_QUAY_PASSWORD: ${{ secrets.CFD_QUAY_PASSWORD }}
+          DH_PASSWORD: ${{ secrets.DH_PASSWORD }}
+        run: |
+          ./scripts/deploy.bat
