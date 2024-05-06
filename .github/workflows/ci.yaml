@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
   schedule:
-    - cron: "0 6 * * SUN"  # Once weekly on Sunday @ 0600 UTC
+    - cron: "0 6 * * SUN" # Once weekly on Sunday @ 0600 UTC
   workflow_dispatch: null
 
 jobs:
@@ -17,74 +17,74 @@ jobs:
       fail-fast: false
       matrix:
         cfg:
-        - DOCKERIMAGE: linux-anvil-comp7
-          DOCKERTAG: latest
-          DISTRO_NAME: "centos"
-          DISTRO_VER: "6"
-          SHORT_DESCRIPTION: "conda-forge build image for Cent0S 6 on x86_64"
+          - DOCKERIMAGE: linux-anvil-comp7
+            DOCKERTAG: latest
+            DISTRO_NAME: "centos"
+            DISTRO_VER: "6"
+            SHORT_DESCRIPTION: "conda-forge build image for Cent0S 6 on x86_64"
 
-        - DOCKERIMAGE: linux-anvil-cos7-x86_64
-          DOCKERTAG: latest
-          DISTRO_NAME: "centos"
-          DISTRO_VER: "7"
-          SHORT_DESCRIPTION: "conda-forge build image for Cent0S 7 on x86_64"
+          - DOCKERIMAGE: linux-anvil-cos7-x86_64
+            DOCKERTAG: latest
+            DISTRO_NAME: "centos"
+            DISTRO_VER: "7"
+            SHORT_DESCRIPTION: "conda-forge build image for Cent0S 7 on x86_64"
 
-        - DOCKERIMAGE: linux-anvil-ppc64le
-          DOCKERTAG: latest
-          DISTRO_NAME: "centos"
-          DISTRO_VER: "7"
-          SHORT_DESCRIPTION: "conda-forge build image for Cent0S 7 on ppc64le"
+          - DOCKERIMAGE: linux-anvil-ppc64le
+            DOCKERTAG: latest
+            DISTRO_NAME: "centos"
+            DISTRO_VER: "7"
+            SHORT_DESCRIPTION: "conda-forge build image for Cent0S 7 on ppc64le"
 
-        - DOCKERIMAGE: linux-anvil-aarch64
-          DOCKERTAG: latest
-          DISTRO_NAME: "centos"
-          DISTRO_VER: "7"
-          SHORT_DESCRIPTION: "conda-forge build image for Cent0S 7 on aarch64"
+          - DOCKERIMAGE: linux-anvil-aarch64
+            DOCKERTAG: latest
+            DISTRO_NAME: "centos"
+            DISTRO_VER: "7"
+            SHORT_DESCRIPTION: "conda-forge build image for Cent0S 7 on aarch64"
 
-        - DOCKERIMAGE: linux-anvil-cuda
-          DOCKERTAG: "11.8"
-          CUDA_VER: "11.8.0"
-          DISTRO_NAME: "centos"
-          DISTRO_VER: "7"
-          SHORT_DESCRIPTION: "conda-forge build image for Cent0S 7 on x86_64 with CUDA"
+          - DOCKERIMAGE: linux-anvil-cuda
+            DOCKERTAG: "11.8"
+            CUDA_VER: "11.8.0"
+            DISTRO_NAME: "centos"
+            DISTRO_VER: "7"
+            SHORT_DESCRIPTION: "conda-forge build image for Cent0S 7 on x86_64 with CUDA"
 
-        - DOCKERIMAGE: linux-anvil-ppc64le-cuda
-          DOCKERTAG: "11.8"
-          CUDA_VER: "11.8.0"
-          DISTRO_NAME: "ubi"
-          DISTRO_VER: "8"
-          SHORT_DESCRIPTION: "conda-forge build image for Cent0S 8 on ppc64le with CUDA"
+          - DOCKERIMAGE: linux-anvil-ppc64le-cuda
+            DOCKERTAG: "11.8"
+            CUDA_VER: "11.8.0"
+            DISTRO_NAME: "ubi"
+            DISTRO_VER: "8"
+            SHORT_DESCRIPTION: "conda-forge build image for Cent0S 8 on ppc64le with CUDA"
 
-        - DOCKERIMAGE: linux-anvil-aarch64-cuda
-          DOCKERTAG: "11.8"
-          CUDA_VER: "11.8.0"
-          DISTRO_NAME: "ubi"
-          DISTRO_VER: "8"
-          SHORT_DESCRIPTION: "conda-forge build image for Cent0S 8 on aarch64 with CUDA"
+          - DOCKERIMAGE: linux-anvil-aarch64-cuda
+            DOCKERTAG: "11.8"
+            CUDA_VER: "11.8.0"
+            DISTRO_NAME: "ubi"
+            DISTRO_VER: "8"
+            SHORT_DESCRIPTION: "conda-forge build image for Cent0S 8 on aarch64 with CUDA"
 
-        - DOCKERIMAGE: linux-anvil-alma-x86_64
-          DOCKERFILE: linux-anvil-alma
-          DOCKERTAG: "8"
-          DISTRO_ARCH: "amd64"
-          DISTRO_NAME: "almalinux"
-          DISTRO_VER: "8"
-          SHORT_DESCRIPTION: "conda-forge build image for Alma 8 on x86_64"
+          - DOCKERIMAGE: linux-anvil-alma-x86_64
+            DOCKERFILE: linux-anvil-alma
+            DOCKERTAG: "8"
+            DISTRO_ARCH: "amd64"
+            DISTRO_NAME: "almalinux"
+            DISTRO_VER: "8"
+            SHORT_DESCRIPTION: "conda-forge build image for Alma 8 on x86_64"
 
-        - DOCKERIMAGE: linux-anvil-alma-aarch64
-          DOCKERFILE: linux-anvil-alma
-          DOCKERTAG: "8"
-          DISTRO_ARCH: "arm64"
-          DISTRO_NAME: "almalinux"
-          DISTRO_VER: "8"
-          SHORT_DESCRIPTION: "conda-forge build image for Alma 8 on aarch64"
+          - DOCKERIMAGE: linux-anvil-alma-aarch64
+            DOCKERFILE: linux-anvil-alma
+            DOCKERTAG: "8"
+            DISTRO_ARCH: "arm64"
+            DISTRO_NAME: "almalinux"
+            DISTRO_VER: "8"
+            SHORT_DESCRIPTION: "conda-forge build image for Alma 8 on aarch64"
 
-        - DOCKERIMAGE: linux-anvil-alma-ppc64le
-          DOCKERFILE: linux-anvil-alma
-          DOCKERTAG: "8"
-          DISTRO_ARCH: "ppc64le"
-          DISTRO_NAME: "almalinux"
-          DISTRO_VER: "8"
-          SHORT_DESCRIPTION: "conda-forge build image for Alma 8 on ppc64le"
+          - DOCKERIMAGE: linux-anvil-alma-ppc64le
+            DOCKERFILE: linux-anvil-alma
+            DOCKERTAG: "8"
+            DISTRO_ARCH: "ppc64le"
+            DISTRO_NAME: "almalinux"
+            DISTRO_VER: "8"
+            SHORT_DESCRIPTION: "conda-forge build image for Alma 8 on ppc64le"
 
     env:
       DOCKERIMAGE: ${{ matrix.cfg.DOCKERIMAGE }}
@@ -97,7 +97,7 @@ jobs:
       SHORT_DESCRIPTION: ${{ matrix.cfg.SHORT_DESCRIPTION }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
       - name: Enable experimental features (needed for squash)
         run: |
@@ -141,7 +141,7 @@ jobs:
 
       - name: Push README to Dockerhub
         if: github.ref == 'refs/heads/main' && github.repository == 'conda-forge/docker-images'
-        uses: christian-korneck/update-container-description-action@v1
+        uses: christian-korneck/update-container-description-action@d36005551adeaba9698d8d67a296bd16fa91f8e8 # v1
         env:
           DOCKER_USER: condaforgebot
           DOCKER_PASS: ${{ secrets.DH_PASSWORD }}
@@ -153,7 +153,7 @@ jobs:
 
       - name: Push README to Quay.io
         if: github.ref == 'refs/heads/main' && github.repository == 'conda-forge/docker-images'
-        uses: christian-korneck/update-container-description-action@v1
+        uses: christian-korneck/update-container-description-action@d36005551adeaba9698d8d67a296bd16fa91f8e8 # v1
         env:
           DOCKER_APIKEY: ${{ secrets.DOCKER_IMAGES_QUAY_API_KEY }}
         with:
