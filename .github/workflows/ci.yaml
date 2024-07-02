@@ -18,19 +18,25 @@ jobs:
       matrix:
         cfg:
           - DOCKERIMAGE: linux-anvil-cos7-x86_64
+            DOCKERFILE: linux-anvil-cos7
             DOCKERTAG: latest
+            DISTRO_ARCH: "amd64"
             DISTRO_NAME: "centos"
             DISTRO_VER: "7"
             SHORT_DESCRIPTION: "conda-forge build image for Cent0S 7 on x86_64"
 
           - DOCKERIMAGE: linux-anvil-ppc64le
+            DOCKERFILE: linux-anvil-cos7
             DOCKERTAG: latest
+            DISTRO_ARCH: "ppc64le"
             DISTRO_NAME: "centos"
             DISTRO_VER: "7"
             SHORT_DESCRIPTION: "conda-forge build image for Cent0S 7 on ppc64le"
 
           - DOCKERIMAGE: linux-anvil-aarch64
+            DOCKERFILE: linux-anvil-cos7
             DOCKERTAG: latest
+            DISTRO_ARCH: "arm64"
             DISTRO_NAME: "centos"
             DISTRO_VER: "7"
             SHORT_DESCRIPTION: "conda-forge build image for Cent0S 7 on aarch64"
