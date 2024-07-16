@@ -14,6 +14,8 @@ if [[ "${DISTRO_NAME}${DISTRO_VER}" == "centos7" ]]; then
   elif [[ "$(uname -m)" == "aarch64" ]]; then
     rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7-aarch64
   fi
+elif [ "${DISTRO_NAME}${DISTRO_VER}" = "ubi8" ]; then
+  rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 fi
 
 rm -rf "/tmp/centos7-repos"
