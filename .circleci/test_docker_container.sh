@@ -14,7 +14,7 @@ touch /opt/conda/bin/test_conda_forge
 # check that conda is activated
 conda info
 
-# show all packages installed in root
+# show all packages installed in base
 conda list
 
 # check that we can install a conda package
