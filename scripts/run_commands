@@ -5,15 +5,15 @@ set -exo pipefail
 export additional_channel=""
 
 export miniforge_arch="$(uname -m)"
-export miniforge_version="23.3.1-1"
-export python_version="3.10"  # should match the one provided in miniforge
+export miniforge_version="24.7.1-2"
+export python_version="3.12"  # should match the one provided in miniforge
 export condapkg="https://github.com/conda-forge/miniforge/releases/download/${miniforge_version}/Miniforge3-${miniforge_version}-Linux-${miniforge_arch}.sh"
 if [ "$(uname -m)" = "x86_64" ]; then
-   export conda_chksum="b3e14bd70f99bc8959445fad3532128a6af36c5e77bc62226db0e80d1df0e9e9"
+   export conda_chksum="636f7faca2d51ee42b4640ce160c751a46d57621ef4bf14378704c87c5db4fe3"
 elif [ "$(uname -m)" = "ppc64le" ]; then
-   export conda_chksum="2eafa28fee5f1dfffb01feaca70de000f8e8335e1f659603ef0b9a40b9d1f213"
+   export conda_chksum="bb5d14dac73b85da8fbe386cdd3c94022a468563a0c55e6b20a58d82b55a9737"
 elif [ "$(uname -m)" = "aarch64" ]; then
-   export conda_chksum="dc5d94b83251621f088bd82df896ea45e63597293ece7ccd923b2346aed34b89"
+   export conda_chksum="7bf60bce50f57af7ea4500b45eeb401d9350011ab34c9c45f736647d8dba9021"
 else
    exit 1
 fi
