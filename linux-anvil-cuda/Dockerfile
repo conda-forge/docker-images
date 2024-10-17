@@ -41,7 +41,7 @@ RUN ldconfig -v 2>/dev/null | grep -v ^$'\t' | cut -f1 -d":" >> /etc/ld.so.conf.
     ldconfig
 
 # Add the archived repo URL and fix RPM imports
-ADD centos7-repos /tmp/centos7-repos
+ADD rpm-repos /tmp/rpm-repos
 ADD scripts/fix_rpm /opt/docker/bin/fix_rpm
 RUN /opt/docker/bin/fix_rpm
 

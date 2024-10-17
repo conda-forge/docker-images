@@ -5,7 +5,7 @@ set -exo pipefail
 if [[ "${DISTRO_NAME}${DISTRO_VER}" == "centos7" ]]; then
   # Disable outdated repos; use vault instead
   sed -i '/^enabled=/d; /^\[/a\enabled=0' /etc/yum.repos.d/CentOS-Base.repo
-  cp "/tmp/centos7-repos/centos7-$(uname -m)-vault.repo" /etc/yum.repos.d/vault.repo
+  cp "/tmp/rpm-repos/centos7-$(uname -m)-vault.repo" /etc/yum.repos.d/vault.repo
 
   # Resolves a nasty NOKEY warning that appears when using yum.
   rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
@@ -16,6 +16,8 @@ if [[ "${DISTRO_NAME}${DISTRO_VER}" == "centos7" ]]; then
   fi
 elif [ "${DISTRO_NAME}${DISTRO_VER}" = "ubi8" ]; then
   rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+elif [ "${DISTRO_NAME}${DISTRO_VER}" = "almalinux8" ]; then
+  rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux
 fi
 
-rm -rf "/tmp/centos7-repos"
+rm -rf "/tmp/rpm-repos"
