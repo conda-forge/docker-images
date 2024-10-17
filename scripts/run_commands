@@ -8,6 +8,7 @@ export miniforge_arch="$(uname -m)"
 export miniforge_version="24.7.1-2"
 export micromamba_version="1.5.10-0"
 export python_version="3.12"  # should match the one provided in miniforge
+echo "$python_version" > /opt/python_version
 if [ "$(uname -m)" = "x86_64" ]; then
    export conda_chksum="636f7faca2d51ee42b4640ce160c751a46d57621ef4bf14378704c87c5db4fe3"
    export micromamba_arch="64"
