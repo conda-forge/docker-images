@@ -6,17 +6,26 @@ export additional_channel=""
 
 export miniforge_arch="$(uname -m)"
 export miniforge_version="24.7.1-2"
+export micromamba_version="1.5.10-0"
 export python_version="3.12"  # should match the one provided in miniforge
-export condapkg="https://github.com/conda-forge/miniforge/releases/download/${miniforge_version}/Miniforge3-${miniforge_version}-Linux-${miniforge_arch}.sh"
+echo "$python_version" > /opt/python_version
 if [ "$(uname -m)" = "x86_64" ]; then
    export conda_chksum="636f7faca2d51ee42b4640ce160c751a46d57621ef4bf14378704c87c5db4fe3"
+   export micromamba_arch="64"
+   export micromamba_chksum="80057e007579d482a39dc283dd3e725503e34da7e7c51844957164511cdb917b"
 elif [ "$(uname -m)" = "ppc64le" ]; then
    export conda_chksum="bb5d14dac73b85da8fbe386cdd3c94022a468563a0c55e6b20a58d82b55a9737"
+   export micromamba_arch="ppc64le"
+   export micromamba_chksum="5528e92b12f7389a8d23a409a476e871f4f889a17e381924cf74459f14627ddd"
 elif [ "$(uname -m)" = "aarch64" ]; then
    export conda_chksum="7bf60bce50f57af7ea4500b45eeb401d9350011ab34c9c45f736647d8dba9021"
+   export micromamba_arch="aarch64"
+   export micromamba_chksum="7803a2aa51a5f0a58f3d2ef0f07724edb67f31f61b3e44ae9b8d6c9f009f7996"
 else
    exit 1
 fi
+export condapkg="https://github.com/conda-forge/miniforge/releases/download/${miniforge_version}/Miniforge3-${miniforge_version}-Linux-${miniforge_arch}.sh"
+export micromambapkg="https://github.com/mamba-org/micromamba-releases/releases/download/${micromamba_version}/micromamba-linux-${micromamba_arch}"
 
 # give sudo permission for conda user to run yum (user creation is postponed
 # to the entrypoint, so we can create a user with the same id as the host)
@@ -32,6 +41,12 @@ sha256sum miniconda.sh | grep $conda_chksum
 
 bash miniconda.sh -b -p /opt/conda
 rm -f miniconda.sh
+
+# Download micromamba and put it condabin
+curl -s -L $micromambapkg > /opt/conda/condabin/micromamba
+sha256sum /opt/conda/condabin/micromamba | grep $micromamba_chksum
+chmod +x /opt/conda/condabin/micromamba 
+ln -s /opt/conda/condabin/micromamba /opt/conda/bin/micromamba
 
 # Work around TLS issues while updating conda's python and retrieving channel notices
 export CONDA_NUMBER_CHANNEL_NOTICES="0"
