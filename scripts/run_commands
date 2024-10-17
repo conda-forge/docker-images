@@ -43,7 +43,7 @@ rm -f miniconda.sh
 
 # Download micromamba and put it condabin
 curl -s -L $micromambapkg > /opt/conda/condabin/micromamba
-sha256 /opt/conda/condabin/micromamba | grep $micromamba_chksum
+sha256sum /opt/conda/condabin/micromamba | grep $micromamba_chksum
 
 # Work around TLS issues while updating conda's python and retrieving channel notices
 export CONDA_NUMBER_CHANNEL_NOTICES="0"
