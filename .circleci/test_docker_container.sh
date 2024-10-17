@@ -11,14 +11,21 @@ locale -a | grep -i 'en_US.UTF.\?8'
 # check that /opt/conda has correct permissions
 touch /opt/conda/bin/test_conda_forge
 
-# check that conda is activated
+# check that conda and micromamba are activated
 conda info
+micromamba info --root-prefix /opt/conda
 
 # show all packages installed in base
 conda list
 
-# check that we can install a conda package
+# check that we can install a conda package with conda
 conda install --yes --quiet conda-forge-pinning -c conda-forge
+
+# check that we can install a conda package with micromamba
+MAMBA_PKGS_DIRS=/opt/conda/pkgs micromamba install \
+    --root-prefix ~/.conda --prefix=/opt/conda \
+    --yes --quiet --override-channels -c conda-forge \
+    conda-forge-ci-setup
 
 set +e
 /usr/bin/sudo -n yum install mesa-libGL mesa-dri-drivers libselinux libXdamage libXxf86vm libXext
