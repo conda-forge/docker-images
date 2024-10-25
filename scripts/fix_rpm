@@ -16,7 +16,7 @@ if [[ "${DISTRO_NAME}${DISTRO_VER}" == "centos7" ]]; then
   fi
 elif [ "${DISTRO_NAME}${DISTRO_VER}" = "ubi8" ]; then
   rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
-elif [ "${DISTRO_NAME}${DISTRO_VER}" = "almalinux8" ]; then
+elif [ "${DISTRO_NAME}" = "almalinux" ]; then
   rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux
 fi
 
