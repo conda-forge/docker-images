@@ -103,7 +103,7 @@ jobs:
       SHORT_DESCRIPTION: ${{ matrix.cfg.SHORT_DESCRIPTION }}
 
     steps:
-      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Enable experimental features (needed for squash)
         run: |
@@ -174,5 +174,5 @@ jobs:
     permissions:
       actions: write
     steps:
-      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - uses: gautamkrishnar/keepalive-workflow@3eb47f21355191080dca0f7662d45c192d2ef64d # 2.0.7
