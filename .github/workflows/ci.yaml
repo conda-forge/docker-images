@@ -18,7 +18,7 @@ jobs:
       matrix:
         cfg:
           - DOCKERIMAGE: linux-anvil-cos7-x86_64
-            DOCKERFILE: linux-anvil-cos7
+            DOCKERFILE: linux-anvil
             DOCKERTAG: latest
             DISTRO_ARCH: "amd64"
             DISTRO_NAME: "centos"
@@ -26,7 +26,7 @@ jobs:
             SHORT_DESCRIPTION: "conda-forge build image for Cent0S 7 on x86_64"
 
           - DOCKERIMAGE: linux-anvil-ppc64le
-            DOCKERFILE: linux-anvil-cos7
+            DOCKERFILE: linux-anvil
             DOCKERTAG: latest
             DISTRO_ARCH: "ppc64le"
             DISTRO_NAME: "centos"
@@ -34,7 +34,7 @@ jobs:
             SHORT_DESCRIPTION: "conda-forge build image for Cent0S 7 on ppc64le"
 
           - DOCKERIMAGE: linux-anvil-aarch64
-            DOCKERFILE: linux-anvil-cos7
+            DOCKERFILE: linux-anvil
             DOCKERTAG: latest
             DISTRO_ARCH: "arm64"
             DISTRO_NAME: "centos"
@@ -69,7 +69,7 @@ jobs:
             SHORT_DESCRIPTION: "conda-forge build image for Cent0S 8 on aarch64 with CUDA"
 
           - DOCKERIMAGE: linux-anvil-alma-x86_64
-            DOCKERFILE: linux-anvil-alma
+            DOCKERFILE: linux-anvil
             DOCKERTAG: "8"
             DISTRO_ARCH: "amd64"
             DISTRO_NAME: "almalinux"
@@ -77,7 +77,7 @@ jobs:
             SHORT_DESCRIPTION: "conda-forge build image for Alma 8 on x86_64"
 
           - DOCKERIMAGE: linux-anvil-alma-aarch64
-            DOCKERFILE: linux-anvil-alma
+            DOCKERFILE: linux-anvil
             DOCKERTAG: "8"
             DISTRO_ARCH: "arm64"
             DISTRO_NAME: "almalinux"
@@ -85,7 +85,7 @@ jobs:
             SHORT_DESCRIPTION: "conda-forge build image for Alma 8 on aarch64"
 
           - DOCKERIMAGE: linux-anvil-alma-ppc64le
-            DOCKERFILE: linux-anvil-alma
+            DOCKERFILE: linux-anvil
             DOCKERTAG: "8"
             DISTRO_ARCH: "ppc64le"
             DISTRO_NAME: "almalinux"

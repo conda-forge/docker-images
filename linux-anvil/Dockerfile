@@ -33,18 +33,22 @@ RUN if [ "${DISTRO_ARCH}" = "arm64" ] && [ "${DISTRO_NAME}${DISTRO_VER}" = "cent
     fi
 
 # Add the archived repo URL and fix RPM imports
-ADD centos7-repos /tmp/centos7-repos
+ADD rpm-repos /tmp/rpm-repos
 ADD scripts/fix_rpm /opt/docker/bin/fix_rpm
 RUN /opt/docker/bin/fix_rpm
 
 # Install basic requirements.
 COPY scripts/yum_clean_all /opt/docker/bin/
-RUN yum update -y && \
+RUN if [ "${DISTRO_NAME}${DISTRO_VER}" = "almalinux8" ]; then \
+      EXTRA_YUM_PKGS="glibc-minimal-langpack glibc-langpack-en"; \
+    fi && \
+    yum update -y && \
     yum install -y \
         bzip2 \
         sudo \
         tar \
-        which && \
+        which \
+        ${EXTRA_YUM_PKGS:-} && \
     /opt/docker/bin/yum_clean_all
 
 # Run common commands
@@ -54,7 +58,7 @@ RUN /opt/docker/bin/run_commands
 # Add a file for users to source to activate the `conda`
 # environment `base`. Also add a file that wraps that for
 # use with the `ENTRYPOINT`.
-COPY linux-anvil-cos7/entrypoint_source /opt/docker/bin/entrypoint_source
+COPY linux-anvil/entrypoint_source /opt/docker/bin/entrypoint_source
 COPY scripts/entrypoint /opt/docker/bin/entrypoint
 
 # Ensure that all containers start with tini and the user selected process.
