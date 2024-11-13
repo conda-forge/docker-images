@@ -17,9 +17,9 @@ jobs:
       fail-fast: false
       matrix:
         cfg:
-          - DOCKERIMAGE: linux-anvil-cos7-x86_64
+          - DOCKERIMAGE: linux-anvil-x86_64
             DOCKERFILE: linux-anvil
-            DOCKERTAG: latest
+            DOCKERTAG: "cos7"
             DISTRO_ARCH: "amd64"
             DISTRO_NAME: "centos"
             DISTRO_VER: "7"
@@ -27,7 +27,7 @@ jobs:
 
           - DOCKERIMAGE: linux-anvil-ppc64le
             DOCKERFILE: linux-anvil
-            DOCKERTAG: latest
+            DOCKERTAG: "cos7"
             DISTRO_ARCH: "ppc64le"
             DISTRO_NAME: "centos"
             DISTRO_VER: "7"
@@ -35,13 +35,13 @@ jobs:
 
           - DOCKERIMAGE: linux-anvil-aarch64
             DOCKERFILE: linux-anvil
-            DOCKERTAG: latest
+            DOCKERTAG: "cos7"
             DISTRO_ARCH: "arm64"
             DISTRO_NAME: "centos"
             DISTRO_VER: "7"
             SHORT_DESCRIPTION: "conda-forge build image for CentOS 7 on aarch64"
 
-          - DOCKERIMAGE: linux-anvil-cuda11.8
+          - DOCKERIMAGE: linux-anvil-x86_64-cuda11.8
             DOCKERFILE: linux-anvil-cuda
             DOCKERTAG: "cos7"
             CUDA_VER: "11.8.0"
@@ -50,7 +50,7 @@ jobs:
             DISTRO_VER: "7"
             SHORT_DESCRIPTION: "conda-forge build image for CentOS 7 on x86_64 with CUDA 11.8"
 
-          - DOCKERIMAGE: linux-anvil-cuda11.8
+          - DOCKERIMAGE: linux-anvil-x86_64-cuda11.8
             DOCKERFILE: linux-anvil-cuda
             DOCKERTAG: "ubi8"
             CUDA_VER: "11.8.0"
@@ -77,49 +77,49 @@ jobs:
             DISTRO_VER: "8"
             SHORT_DESCRIPTION: "conda-forge build image for UBI 8 on aarch64 with CUDA 11.8"
 
-          - DOCKERIMAGE: linux-anvil-alma-x86_64
+          - DOCKERIMAGE: linux-anvil-x86_64
             DOCKERFILE: linux-anvil
-            DOCKERTAG: "8"
+            DOCKERTAG: "alma8"
             DISTRO_ARCH: "amd64"
             DISTRO_NAME: "almalinux"
             DISTRO_VER: "8"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 8 on x86_64"
 
-          - DOCKERIMAGE: linux-anvil-alma-aarch64
+          - DOCKERIMAGE: linux-anvil-aarch64
             DOCKERFILE: linux-anvil
-            DOCKERTAG: "8"
+            DOCKERTAG: "alma8"
             DISTRO_ARCH: "arm64"
             DISTRO_NAME: "almalinux"
             DISTRO_VER: "8"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 8 on aarch64"
 
-          - DOCKERIMAGE: linux-anvil-alma-ppc64le
+          - DOCKERIMAGE: linux-anvil-ppc64le
             DOCKERFILE: linux-anvil
-            DOCKERTAG: "8"
+            DOCKERTAG: "alma8"
             DISTRO_ARCH: "ppc64le"
             DISTRO_NAME: "almalinux"
             DISTRO_VER: "8"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 8 on ppc64le"
 
-          - DOCKERIMAGE: linux-anvil-alma-x86_64
+          - DOCKERIMAGE: linux-anvil-x86_64
             DOCKERFILE: linux-anvil
-            DOCKERTAG: "9"
+            DOCKERTAG: "alma9"
             DISTRO_ARCH: "amd64"
             DISTRO_NAME: "almalinux"
             DISTRO_VER: "9"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 9 on x86_64"
 
-          - DOCKERIMAGE: linux-anvil-alma-aarch64
+          - DOCKERIMAGE: linux-anvil-aarch64
             DOCKERFILE: linux-anvil
-            DOCKERTAG: "9"
+            DOCKERTAG: "alma9"
             DISTRO_ARCH: "arm64"
             DISTRO_NAME: "almalinux"
             DISTRO_VER: "9"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 9 on aarch64"
 
-          - DOCKERIMAGE: linux-anvil-alma-ppc64le
+          - DOCKERIMAGE: linux-anvil-ppc64le
             DOCKERFILE: linux-anvil
-            DOCKERTAG: "9"
+            DOCKERTAG: "alma9"
             DISTRO_ARCH: "ppc64le"
             DISTRO_NAME: "almalinux"
             DISTRO_VER: "9"
