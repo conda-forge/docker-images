@@ -46,6 +46,15 @@ jobs:
             DOCKERTAG: "11.8"
             CUDA_VER: "11.8.0"
             DISTRO_ARCH: "amd64"
+            DISTRO_NAME: "centos"
+            DISTRO_VER: "7"
+            SHORT_DESCRIPTION: "conda-forge build image for CentOS 7 on x86_64 with CUDA 11.8"
+
+          - DOCKERIMAGE: linux-anvil-cuda
+            DOCKERFILE: linux-anvil-cuda
+            DOCKERTAG: "11.8"
+            CUDA_VER: "11.8.0"
+            DISTRO_ARCH: "amd64"
             DISTRO_NAME: "ubi"
             DISTRO_VER: "8"
             SHORT_DESCRIPTION: "conda-forge build image for UBI 8 on x86_64 with CUDA 11.8"
