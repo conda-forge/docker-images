@@ -41,36 +41,36 @@ jobs:
             DISTRO_VER: "7"
             SHORT_DESCRIPTION: "conda-forge build image for CentOS 7 on aarch64"
 
-          - DOCKERIMAGE: linux-anvil-cuda
+          - DOCKERIMAGE: linux-anvil-cuda11.8
             DOCKERFILE: linux-anvil-cuda
-            DOCKERTAG: "11.8"
+            DOCKERTAG: "cos7"
             CUDA_VER: "11.8.0"
             DISTRO_ARCH: "amd64"
             DISTRO_NAME: "centos"
             DISTRO_VER: "7"
             SHORT_DESCRIPTION: "conda-forge build image for CentOS 7 on x86_64 with CUDA 11.8"
 
-          - DOCKERIMAGE: linux-anvil-cuda
+          - DOCKERIMAGE: linux-anvil-cuda11.8
             DOCKERFILE: linux-anvil-cuda
-            DOCKERTAG: "11.8"
+            DOCKERTAG: "ubi8"
             CUDA_VER: "11.8.0"
             DISTRO_ARCH: "amd64"
             DISTRO_NAME: "ubi"
             DISTRO_VER: "8"
             SHORT_DESCRIPTION: "conda-forge build image for UBI 8 on x86_64 with CUDA 11.8"
 
-          - DOCKERIMAGE: linux-anvil-ppc64le-cuda
+          - DOCKERIMAGE: linux-anvil-ppc64le-cuda11.8
             DOCKERFILE: linux-anvil-cuda
-            DOCKERTAG: "11.8"
+            DOCKERTAG: "ubi8"
             CUDA_VER: "11.8.0"
             DISTRO_ARCH: "ppc64le"
             DISTRO_NAME: "ubi"
             DISTRO_VER: "8"
             SHORT_DESCRIPTION: "conda-forge build image for UBI 8 on ppc64le with CUDA 11.8"
 
-          - DOCKERIMAGE: linux-anvil-aarch64-cuda
+          - DOCKERIMAGE: linux-anvil-aarch64-cuda11.8
             DOCKERFILE: linux-anvil-cuda
-            DOCKERTAG: "11.8"
+            DOCKERTAG: "ubi8"
             CUDA_VER: "11.8.0"
             DISTRO_ARCH: "arm64"
             DISTRO_NAME: "ubi"
