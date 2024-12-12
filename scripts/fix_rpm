@@ -21,7 +21,7 @@ elif [ "${DISTRO_NAME}${DISTRO_VER}" = "almalinux8" ]; then
   ls -l /etc/yum.repos.d
   cat /etc/yum.repos.d/almalinux-powertools.repo
   # PowerTools repo not enabled by default
-  sed -i '/^enabled=/d; /^\[/a\enabled=1' /etc/yum.repos.d/almalinux-powertools.repo
+  sed -i '/^enabled=/d; /^\[powertools\]/a\enabled=1' /etc/yum.repos.d/almalinux-powertools.repo
   cat /etc/yum.repos.d/almalinux-powertools.repo
 elif [ "${DISTRO_NAME}${DISTRO_VER}" = "almalinux9" ]; then
   # alma9 removed SHA1 availability by default, but it's still needed for the
@@ -31,7 +31,7 @@ elif [ "${DISTRO_NAME}${DISTRO_VER}" = "almalinux9" ]; then
   ls -l /etc/yum.repos.d
   cat /etc/yum.repos.d/almalinux-crb.repo
   # PowerTools repo changed name to CRB in alma9
-  sed -i '/^enabled=/d; /^\[/a\enabled=1' /etc/yum.repos.d/almalinux-crb.repo
+  sed -i '/^enabled=/d; /^\[crb\]/a\enabled=1' /etc/yum.repos.d/almalinux-crb.repo
   cat /etc/yum.repos.d/almalinux-crb.repo
 fi
 
