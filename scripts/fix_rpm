@@ -20,8 +20,13 @@ elif [ "${DISTRO_NAME}${DISTRO_VER}" = "almalinux8" ]; then
   rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux
   ls -l /etc/yum.repos.d
   cat /etc/yum.repos.d/almalinux-powertools.repo
-  # PowerTools repo not enabled by default
-  sed -i '/^enabled=/d; /^\[powertools\]/a\enabled=1; /^\[powertools-/a\enabled=0' /etc/yum.repos.d/almalinux-powertools.repo
+  # PowerTools repo not enabled by default;
+  # remove all `enabled=` lines
+  sed -i '/^enabled=/d' /etc/yum.repos.d/almalinux-powertools.repo
+  # for the [powertools] section, append `enabled=1` after that line
+  sed -i '/^\[powertools\]/a\enabled=1' /etc/yum.repos.d/almalinux-powertools.repo
+  # but for [powertools-{source,debug}] sections, append `enabled=0`
+  sed -i '/^\[powertools-/a\enabled=0' /etc/yum.repos.d/almalinux-powertools.repo
   cat /etc/yum.repos.d/almalinux-powertools.repo
 elif [ "${DISTRO_NAME}${DISTRO_VER}" = "almalinux9" ]; then
   # alma9 removed SHA1 availability by default, but it's still needed for the
@@ -31,7 +36,9 @@ elif [ "${DISTRO_NAME}${DISTRO_VER}" = "almalinux9" ]; then
   ls -l /etc/yum.repos.d
   cat /etc/yum.repos.d/almalinux-crb.repo
   # PowerTools repo changed name to CRB in alma9
-  sed -i '/^enabled=/d; /^\[crb\]/a\enabled=1; /^\[crb-/a\enabled=0' /etc/yum.repos.d/almalinux-crb.repo
+  sed -i '/^enabled=/d' /etc/yum.repos.d/almalinux-crb.repo
+  sed -i '/^\[crb\]/a\enabled=1' /etc/yum.repos.d/almalinux-crb.repo
+  sed -i '/^\[crb-/a\enabled=0' /etc/yum.repos.d/almalinux-crb.repo
   cat /etc/yum.repos.d/almalinux-crb.repo
 fi
 
