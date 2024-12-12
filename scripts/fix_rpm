@@ -25,7 +25,7 @@ elif [ "${DISTRO_NAME}${DISTRO_VER}" = "almalinux8" ]; then
   sed -i '/^enabled=/d' /etc/yum.repos.d/almalinux-powertools.repo
   # for the [powertools] section, append `enabled=1` after that line
   sed -i '/^\[powertools\]/a\enabled=1' /etc/yum.repos.d/almalinux-powertools.repo
-  # but for [powertools-{source,debug}] sections, append `enabled=0`
+  # for [powertools-{source,debuginfo}] sections, append `enabled=0`
   sed -i '/^\[powertools-/a\enabled=0' /etc/yum.repos.d/almalinux-powertools.repo
   cat /etc/yum.repos.d/almalinux-powertools.repo
 elif [ "${DISTRO_NAME}${DISTRO_VER}" = "almalinux9" ]; then
