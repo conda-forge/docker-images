@@ -18,11 +18,24 @@ elif [ "${DISTRO_NAME}${DISTRO_VER}" = "ubi8" ]; then
   rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 elif [ "${DISTRO_NAME}${DISTRO_VER}" = "almalinux8" ]; then
   rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux
+
+  # PowerTools repo not enabled by default;
+  # remove all `enabled=` lines
+  sed -i '/^enabled=/d' /etc/yum.repos.d/almalinux-powertools.repo
+  # for the [powertools] section, append `enabled=1` after that line
+  sed -i '/^\[powertools\]/a\enabled=1' /etc/yum.repos.d/almalinux-powertools.repo
+  # for [powertools-{source,debuginfo}] sections, append `enabled=0`
+  sed -i '/^\[powertools-/a\enabled=0' /etc/yum.repos.d/almalinux-powertools.repo
 elif [ "${DISTRO_NAME}${DISTRO_VER}" = "almalinux9" ]; then
   # alma9 removed SHA1 availability by default, but it's still needed for the
   # RPM key; re-enable it. Details: https://access.redhat.com/articles/3666211
   update-crypto-policies --set LEGACY
   rpm --import https://repo.almalinux.org/almalinux/RPM-GPG-KEY-AlmaLinux
+
+  # PowerTools repo changed name to CRB in alma9
+  sed -i '/^enabled=/d' /etc/yum.repos.d/almalinux-crb.repo
+  sed -i '/^\[crb\]/a\enabled=1' /etc/yum.repos.d/almalinux-crb.repo
+  sed -i '/^\[crb-/a\enabled=0' /etc/yum.repos.d/almalinux-crb.repo
 fi
 
 rm -rf "/tmp/rpm-repos"
