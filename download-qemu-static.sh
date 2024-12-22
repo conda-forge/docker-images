@@ -21,8 +21,8 @@ DEBIAN_FRONTEND=noninteractive \
 # prefer non-`.0` patch releases to try to avoid potential new regressions;
 # if possible, check https://gitlab.com/qemu-project/qemu/-/issues
 # for relevant issues in old vs new version;
-version='8.2.7'
-build='1.fc40'
+version='8.2.8'
+build='2.fc40'
 for arch in aarch64 ppc64le s390x; do
     curl -sL \
         "https://kojipkgs.fedoraproject.org/packages/qemu/${version}/${build}/x86_64/qemu-user-static-${arch/ppc64le/ppc}-${version}-${build}.x86_64.rpm" |
@@ -30,7 +30,7 @@ for arch in aarch64 ppc64le s390x; do
 done
 
 sha256sum --check << 'EOF'
-537131cbd6596728165e2036c9269e19e575a95d518c805d4462d865c63263eb  qemu-aarch64-static
-2ed243a429e4c994515f64c8b2b7b81bc1d2d77eaec4c0de67e393bd914d154d  qemu-ppc64le-static
-06d6bcd11b9a13770d1aa2120f37d842b67656d033d99793d21eefcd7775ff51  qemu-s390x-static
+c41cd478bdcccbc76a0e35db8ba65861038cd8f0d6339abc0cfd19eadc335fc6  qemu-aarch64-static
+9b5c44f35eceaf6484ec11bc03047001293586f9ae73861dde87329243d56ae7  qemu-ppc64le-static
+767a23c0ec4570b28d352ad00c55c4fc2315d5707078d022c1d2cc07d827561e  qemu-s390x-static
 EOF
