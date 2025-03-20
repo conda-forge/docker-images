@@ -27,6 +27,7 @@ ENV CUDA_HOME /usr/local/cuda
 # bust the docker cache so that we always rerun the installs below
 # ADD https://loripsum.net/api /opt/docker/etc/gibberish
 # ADD https://worldtimeapi.org/api/timezone/Etc/UTC /opt/docker/etc/gibberish
+ADD https://www.random.org/cgi-bin/randbyte?nbytes=4096&format=h /opt/docker/etc/gibberish
 
 # Add qemu in here so that we can use this image on regular linux hosts with qemu user installed
 ADD qemu-aarch64-static /usr/bin/qemu-aarch64-static
