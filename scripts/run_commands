@@ -30,10 +30,13 @@ export micromambapkg="https://github.com/mamba-org/micromamba-releases/releases/
 # give sudo permission for conda user to run yum (user creation is postponed
 # to the entrypoint, so we can create a user with the same id as the host)
 echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
-# give sudo permission to copy the cuda headers and libraries for cross compilation
+# give sudo permission to copy the cuda headers and libraries for cross compilation & cleanup after
 echo 'conda ALL=NOPASSWD: /usr/bin/cp -r /opt/conda/targets/x86_64-linux /usr/local/cuda/targets/x86_64-linux' >> /etc/sudoers
 echo 'conda ALL=NOPASSWD: /usr/bin/cp -r /opt/conda/targets/ppc64le-linux /usr/local/cuda/targets/ppc64le-linux' >> /etc/sudoers
 echo 'conda ALL=NOPASSWD: /usr/bin/cp -r /opt/conda/targets/sbsa-linux /usr/local/cuda/targets/sbsa-linux' >> /etc/sudoers
+echo 'conda ALL=NOPASSWD: /usr/bin/rm -rf /opt/conda/targets/x86_64-linux' >> /etc/sudoers
+echo 'conda ALL=NOPASSWD: /usr/bin/rm -rf /opt/conda/targets/ppc64le-linux' >> /etc/sudoers
+echo 'conda ALL=NOPASSWD: /usr/bin/rm -rf /opt/conda/targets/sbsa-linux' >> /etc/sudoers
 
 # Install the latest Miniconda with Python 3 and update everything.
 curl -s -L $condapkg > miniconda.sh
