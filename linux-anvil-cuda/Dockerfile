@@ -24,10 +24,6 @@ ENV LANGUAGE en_US.UTF-8
 # Set path to CUDA install (this is a symlink to /usr/local/cuda-${CUDA_VER})
 ENV CUDA_HOME /usr/local/cuda
 
-# bust the docker cache so that we always rerun the installs below
-# ADD https://loripsum.net/api /opt/docker/etc/gibberish
-ADD https://worldtimeapi.org/api/timezone/Etc/UTC /opt/docker/etc/gibberish
-
 # Add qemu in here so that we can use this image on regular linux hosts with qemu user installed
 ADD qemu-aarch64-static /usr/bin/qemu-aarch64-static
 ADD qemu-ppc64le-static /usr/bin/qemu-ppc64le-static
