@@ -9,6 +9,10 @@ on:
     - cron: "0 6 * * SUN" # Once weekly on Sunday @ 0600 UTC
   workflow_dispatch: null
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: ${{ matrix.cfg.DOCKERIMAGE }}:${{ matrix.cfg.DOCKERTAG }} (${{ matrix.cfg.DISTRO_ARCH }})
@@ -199,6 +203,14 @@ jobs:
           destination_container_repo: quay.io/condaforge/${{ matrix.cfg.DOCKERIMAGE }}:${{ matrix.cfg.DOCKERTAG }}
           provider: quay
           readme_file: "${{ matrix.cfg.DOCKERFILE == '' && matrix.cfg.DOCKERIMAGE || matrix.cfg.DOCKERFILE }}/README.md"
+
+  build-success:
+    name: Build success
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Notify build success
+        run: echo "Build was successful!"
 
   keepalive-job:
     name: Keep alive
