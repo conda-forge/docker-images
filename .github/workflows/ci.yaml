@@ -9,6 +9,10 @@ on:
     - cron: "0 6 * * SUN" # Once weekly on Sunday @ 0600 UTC
   workflow_dispatch: null
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: ${{ matrix.cfg.DOCKERIMAGE }}:${{ matrix.cfg.DOCKERTAG }} (${{ matrix.cfg.DISTRO_ARCH }})
