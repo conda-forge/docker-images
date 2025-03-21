@@ -200,6 +200,14 @@ jobs:
           provider: quay
           readme_file: "${{ matrix.cfg.DOCKERFILE == '' && matrix.cfg.DOCKERIMAGE || matrix.cfg.DOCKERFILE }}/README.md"
 
+  build-success:
+    name: Build success
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Notify build success
+        run: echo "Build was successful!"
+
   keepalive-job:
     name: Keep alive
     runs-on: ubuntu-latest
