@@ -57,6 +57,7 @@ RUN yum update -y --disablerepo=cuda && \
         sudo \
         tar \
         which \
+        diffutils \
     && \
     /opt/docker/bin/yum_clean_all
 

@@ -50,6 +50,7 @@ RUN if [ "${DISTRO_NAME}" = "almalinux" ]; then \
         sudo \
         tar \
         which \
+        diffutils \
         ${EXTRA_YUM_PKGS:-} && \
     /opt/docker/bin/yum_clean_all
 
