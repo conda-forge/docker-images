@@ -71,7 +71,8 @@ mamba install --yes --quiet \
     conda-build \
     anaconda-client \
     su-exec \
-    tini
+    tini \
+    rattler-build
 
 # Clean to reduce image size
 conda clean -tipy
