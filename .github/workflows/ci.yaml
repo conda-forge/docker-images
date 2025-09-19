@@ -210,13 +210,4 @@ jobs:
     needs: build
     steps:
       - name: Notify build success
-        run: echo "Build was successful!"
-
-  keepalive-job:
-    name: Keep alive
-    runs-on: ubuntu-latest
-    if: github.event_name == 'schedule'
-    permissions:
-      actions: write
-    steps:
-      - uses: conda-forge/keepalive-action@7a9194bad497f0b993708eeaf10fc0a2d726eb71          
+        run: echo "Build was successful!"     
