@@ -71,6 +71,7 @@ mamba install --yes --quiet \
     conda-build \
     anaconda-client \
     su-exec \
+    pixi \
     tini
 
 # Clean to reduce image size
