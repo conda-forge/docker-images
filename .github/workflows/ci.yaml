@@ -129,6 +129,30 @@ jobs:
             DISTRO_VER: "9"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 9 on ppc64le"
 
+          - DOCKERIMAGE: linux-anvil-x86_64
+            DOCKERFILE: linux-anvil
+            DOCKERTAG: "alma10"
+            DISTRO_ARCH: "amd64"
+            DISTRO_NAME: "almalinux"
+            DISTRO_VER: "10"
+            SHORT_DESCRIPTION: "conda-forge build image for Alma 10 on x86_64"
+
+          - DOCKERIMAGE: linux-anvil-aarch64
+            DOCKERFILE: linux-anvil
+            DOCKERTAG: "alma10"
+            DISTRO_ARCH: "arm64"
+            DISTRO_NAME: "almalinux"
+            DISTRO_VER: "10"
+            SHORT_DESCRIPTION: "conda-forge build image for Alma 10 on aarch64"
+
+          - DOCKERIMAGE: linux-anvil-ppc64le
+            DOCKERFILE: linux-anvil
+            DOCKERTAG: "alma10"
+            DISTRO_ARCH: "ppc64le"
+            DISTRO_NAME: "almalinux"
+            DISTRO_VER: "10"
+            SHORT_DESCRIPTION: "conda-forge build image for Alma 10 on ppc64le"
+
     env:
       DOCKERIMAGE: ${{ matrix.cfg.DOCKERIMAGE }}
       DOCKERFILE: ${{ matrix.cfg.DOCKERFILE }}
