@@ -230,7 +230,7 @@ jobs:
 
   build-success:
     name: Build success
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: build
     steps:
       - name: Notify build success
