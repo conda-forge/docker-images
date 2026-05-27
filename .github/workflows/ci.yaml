@@ -202,7 +202,7 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.repository == 'conda-forge/docker-images'
         env:
           CFD_QUAY_PASSWORD: ${{ secrets.CF_DAEMON_QUAY_PASSWORD }}
-          DH_PASSWORD: ${{ secrets.DH_PASSWORD }}
+          DH_PASSWORD: ${{ secrets.CF_BOT_DH_PASSWORD }}
         run: |
           ./scripts/deploy
 
