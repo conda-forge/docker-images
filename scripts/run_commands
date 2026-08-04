@@ -75,6 +75,7 @@ mamba install --yes --quiet \
     anaconda-client \
     su-exec \
     pixi \
+    rattler-build \
     tini
 
 # Clean to reduce image size
