@@ -21,8 +21,8 @@ DEBIAN_FRONTEND=noninteractive \
 # prefer non-`.0` patch releases to try to avoid potential new regressions;
 # if possible, check https://gitlab.com/qemu-project/qemu/-/issues
 # for relevant issues in old vs new version;
-version='8.2.8'
-build='2.fc40'
+version='9.2.4'
+build='2.fc42'
 for arch in aarch64 ppc64le s390x riscv64; do
     pkg_arch="${arch}"
     if [[ "${arch}" == 'ppc64le' ]]; then
@@ -36,8 +36,8 @@ for arch in aarch64 ppc64le s390x riscv64; do
 done
 
 sha256sum --check << 'EOF'
-c41cd478bdcccbc76a0e35db8ba65861038cd8f0d6339abc0cfd19eadc335fc6  qemu-aarch64-static
-9b5c44f35eceaf6484ec11bc03047001293586f9ae73861dde87329243d56ae7  qemu-ppc64le-static
-767a23c0ec4570b28d352ad00c55c4fc2315d5707078d022c1d2cc07d827561e  qemu-s390x-static
-c71ac58f8749dc5334fc85d92ffb1bb41e54ebb143b7a79e9eac95d7efe283ca  qemu-riscv64-static
+fbc515a0652b5084a52411f30b3cb0c95e117b417611b53529daf4a3f5fa5035  qemu-aarch64-static
+0e15b6a758f8709897dbf911ed9eac66056a68417f466e3a6afc8f76cac80b54  qemu-ppc64le-static
+1a34e86319d55c1a781feef11156ec33961600a6cd6a5269c33e5bfa8f306de8  qemu-s390x-static
+f6850076fc69d6bdbd1f3002634371c43e20c65942de944cded92b4c927332b2  qemu-riscv64-static
 EOF
