@@ -2,33 +2,29 @@
 
 set -exo pipefail
 
-export additional_channel=""
+export python_version="3.14"
 
-export miniforge_arch="$(uname -m)"
-export miniforge_version="24.7.1-2"
-export micromamba_version="1.5.10-0"
-export python_version="3.12"  # should match the one provided in miniforge
-echo "$python_version" > /opt/python_version
+# We bootstrap /opt/conda using a `micromamba` binary fetched directly from
+# conda-forge (rather than the mamba-org/micromamba-releases GitHub releases),
+# since conda-forge is the only place currently publishing micromamba builds
+# for riscv64; see https://github.com/conda-forge/conda-forge.github.io/issues/1744
+export micromamba_version="2.9.0-0"
 if [ "$(uname -m)" = "x86_64" ]; then
-   export conda_chksum="636f7faca2d51ee42b4640ce160c751a46d57621ef4bf14378704c87c5db4fe3"
-   export micromamba_arch="64"
-   export micromamba_chksum="80057e007579d482a39dc283dd3e725503e34da7e7c51844957164511cdb917b"
+   export micromamba_subdir="linux-64"
+   export micromamba_chksum="8761c382127e6363bd9e0a2451aa3ef90d071a79133f736e2f759a3bf13040dd"
 elif [ "$(uname -m)" = "ppc64le" ]; then
-   export conda_chksum="bb5d14dac73b85da8fbe386cdd3c94022a468563a0c55e6b20a58d82b55a9737"
-   export micromamba_arch="ppc64le"
-   export micromamba_chksum="5528e92b12f7389a8d23a409a476e871f4f889a17e381924cf74459f14627ddd"
+   export micromamba_subdir="linux-ppc64le"
+   export micromamba_chksum="23417c79ced152dd6f8e66731e45a77d7058e6af5007eef6fa584f34ce6232b2"
 elif [ "$(uname -m)" = "aarch64" ]; then
-   export conda_chksum="7bf60bce50f57af7ea4500b45eeb401d9350011ab34c9c45f736647d8dba9021"
-   export micromamba_arch="aarch64"
-   export micromamba_chksum="7803a2aa51a5f0a58f3d2ef0f07724edb67f31f61b3e44ae9b8d6c9f009f7996"
+   export micromamba_subdir="linux-aarch64"
+   export micromamba_chksum="e705ffeed90ce0659eb546e4b1e1028c9eaf0bc9cc854867b19ac5ce0ba5852f"
 elif [ "$(uname -m)" = "riscv64" ]; then
-   echo "not supported yet; see https://github.com/conda-forge/conda-forge.github.io/issues/1744"
-   exit 1
+   export micromamba_subdir="linux-riscv64"
+   export micromamba_chksum="ee8f4026b762924cdbafd59036165a6b6138a920d5449d2f84284e310a5ee55d"
 else
    exit 1
 fi
-export condapkg="https://github.com/conda-forge/miniforge/releases/download/${miniforge_version}/Miniforge3-${miniforge_version}-Linux-${miniforge_arch}.sh"
-export micromambapkg="https://github.com/mamba-org/micromamba-releases/releases/download/${micromamba_version}/micromamba-linux-${micromamba_arch}"
+export micromambapkg="https://conda.anaconda.org/conda-forge/${micromamba_subdir}/micromamba-${micromamba_version}.tar.bz2"
 
 # give sudo permission for conda user to run yum (user creation is postponed
 # to the entrypoint, so we can create a user with the same id as the host)
@@ -38,46 +34,53 @@ echo 'conda ALL=NOPASSWD: /usr/bin/cp -r /opt/conda/targets/x86_64-linux /usr/lo
 echo 'conda ALL=NOPASSWD: /usr/bin/cp -r /opt/conda/targets/ppc64le-linux /usr/local/cuda/targets/ppc64le-linux' >> /etc/sudoers
 echo 'conda ALL=NOPASSWD: /usr/bin/cp -r /opt/conda/targets/sbsa-linux /usr/local/cuda/targets/sbsa-linux' >> /etc/sudoers
 
-# Install the latest Miniconda with Python 3 and update everything.
-curl -s -L $condapkg > miniconda.sh
-sha256sum miniconda.sh | grep $conda_chksum
+# Download micromamba and use it (from outside the target prefix, since
+# micromamba refuses to bootstrap a root prefix it is itself living in) to
+# create the `base` environment directly at /opt/conda.
+curl -s -L $micromambapkg > /tmp/micromamba.tar.bz2
+sha256sum /tmp/micromamba.tar.bz2 | grep $micromamba_chksum
+mkdir /tmp/micromamba-bootstrap
+tar -xjf /tmp/micromamba.tar.bz2 -C /tmp/micromamba-bootstrap bin/micromamba
+chmod +x /tmp/micromamba-bootstrap/bin/micromamba
 
-bash miniconda.sh -b -p /opt/conda
-rm -f miniconda.sh
+export MAMBA_ROOT_PREFIX=/opt/conda
 
-# Download micromamba and put it condabin
-curl -s -L $micromambapkg > /opt/conda/condabin/micromamba
-sha256sum /opt/conda/condabin/micromamba | grep $micromamba_chksum
-chmod +x /opt/conda/condabin/micromamba 
+# Ensure conda build, deployment and docker tools are present
+if [ "$(uname -m)" = "riscv64" ]; then
+    EXTRA_PKGS=""
+else
+    EXTRA_PKGS="git"
+fi
+/tmp/micromamba-bootstrap/bin/micromamba create --yes -n base -c conda-forge \
+    python=${python_version} \
+    patch \
+    pip \
+    su-exec \
+    pixi \
+    tini \
+    mamba \
+    conda \
+    conda-build \
+    anaconda-client \
+    $EXTRA_PKGS
+
+# Put micromamba itself in condabin, next to the other tools.
+mkdir -p /opt/conda/condabin
+cp /tmp/micromamba-bootstrap/bin/micromamba /opt/conda/condabin/micromamba
 ln -s /opt/conda/condabin/micromamba /opt/conda/bin/micromamba
+rm -rf /tmp/micromamba.tar.bz2 /tmp/micromamba-bootstrap
 
 # Work around TLS issues while updating conda's python and retrieving channel notices
 export CONDA_NUMBER_CHANNEL_NOTICES="0"
-touch /opt/conda/conda-meta/pinned
 ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
 source /opt/conda/etc/profile.d/conda.sh
 conda activate
 conda config --set show_channel_urls True
 conda config --set channel_priority strict
-conda config ${additional_channel} --add channels conda-forge
+conda config --add channels conda-forge
 conda config --show-sources
 
-# Update everything first
-mamba update --yes --all
-
-# Ensure conda build, deployment and docker tools are present
-mamba install --yes --quiet \
-    "python=$python_version" \
-    git \
-    patch \
-    pip \
-    conda-build \
-    anaconda-client \
-    su-exec \
-    pixi \
-    tini
-
-# Clean to reduce image size
+# Clean to reduce image size
 conda clean -tipy
 
 # Install docker tools

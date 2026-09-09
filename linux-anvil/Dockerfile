@@ -1,8 +1,9 @@
 # Set `ARG`s for use in `FROM`.
 ARG DISTRO_ARCH
 ARG DISTRO_NAME
+ARG DISTRO_NAMESPACE
 ARG DISTRO_VER
-FROM --platform=linux/${DISTRO_ARCH} ${DISTRO_NAME}:${DISTRO_VER}
+FROM --platform=linux/${DISTRO_ARCH} docker.io/${DISTRO_NAMESPACE}/${DISTRO_NAME}:${DISTRO_VER}
 
 LABEL maintainer="conda-forge <conda-forge@googlegroups.com>"
 
@@ -15,8 +16,8 @@ ENV DISTRO_ARCH=${DISTRO_ARCH} \
     DISTRO_VER=${DISTRO_VER}
 
 # Set an encoding to make things work smoothly.
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8
 
 # bust the docker cache so that we always rerun the installs below
 # ADD https://loripsum.net/api /opt/docker/etc/gibberish
@@ -42,7 +43,7 @@ RUN /opt/docker/bin/fix_rpm
 
 # Install basic requirements.
 COPY scripts/yum_clean_all /opt/docker/bin/
-RUN if [ "${DISTRO_NAME}" = "almalinux" ]; then \
+RUN if [ "${DISTRO_NAME}" = "almalinux" ] || [ "${DISTRO_NAME}" = "rockylinux" ]; then \
       EXTRA_YUM_PKGS="glibc-minimal-langpack glibc-langpack-en"; \
     fi && \
     yum update -y && \

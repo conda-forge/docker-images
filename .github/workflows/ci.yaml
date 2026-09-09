@@ -26,6 +26,7 @@ jobs:
             DOCKERTAG: "cos7"
             DISTRO_ARCH: "amd64"
             DISTRO_NAME: "centos"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "7"
             SHORT_DESCRIPTION: "conda-forge build image for CentOS 7 on x86_64"
 
@@ -34,6 +35,7 @@ jobs:
             DOCKERTAG: "cos7"
             DISTRO_ARCH: "ppc64le"
             DISTRO_NAME: "centos"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "7"
             SHORT_DESCRIPTION: "conda-forge build image for CentOS 7 on ppc64le"
 
@@ -42,6 +44,7 @@ jobs:
             DOCKERTAG: "cos7"
             DISTRO_ARCH: "arm64/v8"
             DISTRO_NAME: "centos"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "7"
             SHORT_DESCRIPTION: "conda-forge build image for CentOS 7 on aarch64"
 
@@ -51,6 +54,7 @@ jobs:
             CUDA_VER: "11.8.0"
             DISTRO_ARCH: "amd64"
             DISTRO_NAME: "centos"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "7"
             SHORT_DESCRIPTION: "conda-forge build image for CentOS 7 on x86_64 with CUDA 11.8"
 
@@ -60,6 +64,7 @@ jobs:
             CUDA_VER: "11.8.0"
             DISTRO_ARCH: "amd64"
             DISTRO_NAME: "ubi"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "8"
             SHORT_DESCRIPTION: "conda-forge build image for UBI 8 on x86_64 with CUDA 11.8"
 
@@ -69,6 +74,7 @@ jobs:
             CUDA_VER: "11.8.0"
             DISTRO_ARCH: "ppc64le"
             DISTRO_NAME: "ubi"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "8"
             SHORT_DESCRIPTION: "conda-forge build image for UBI 8 on ppc64le with CUDA 11.8"
 
@@ -78,6 +84,7 @@ jobs:
             CUDA_VER: "11.8.0"
             DISTRO_ARCH: "arm64/v8"
             DISTRO_NAME: "ubi"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "8"
             SHORT_DESCRIPTION: "conda-forge build image for UBI 8 on aarch64 with CUDA 11.8"
 
@@ -86,6 +93,7 @@ jobs:
             DOCKERTAG: "alma8"
             DISTRO_ARCH: "amd64"
             DISTRO_NAME: "almalinux"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "8"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 8 on x86_64"
 
@@ -94,6 +102,7 @@ jobs:
             DOCKERTAG: "alma8"
             DISTRO_ARCH: "arm64/v8"
             DISTRO_NAME: "almalinux"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "8"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 8 on aarch64"
 
@@ -102,6 +111,7 @@ jobs:
             DOCKERTAG: "alma8"
             DISTRO_ARCH: "ppc64le"
             DISTRO_NAME: "almalinux"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "8"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 8 on ppc64le"
 
@@ -110,6 +120,7 @@ jobs:
             DOCKERTAG: "alma9"
             DISTRO_ARCH: "amd64"
             DISTRO_NAME: "almalinux"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "9"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 9 on x86_64"
 
@@ -118,6 +129,7 @@ jobs:
             DOCKERTAG: "alma9"
             DISTRO_ARCH: "arm64/v8"
             DISTRO_NAME: "almalinux"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "9"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 9 on aarch64"
 
@@ -126,6 +138,7 @@ jobs:
             DOCKERTAG: "alma9"
             DISTRO_ARCH: "ppc64le"
             DISTRO_NAME: "almalinux"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "9"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 9 on ppc64le"
 
@@ -134,6 +147,7 @@ jobs:
             DOCKERTAG: "alma10"
             DISTRO_ARCH: "amd64"
             DISTRO_NAME: "almalinux"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "10"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 10 on x86_64"
 
@@ -142,6 +156,7 @@ jobs:
             DOCKERTAG: "alma10"
             DISTRO_ARCH: "arm64/v8"
             DISTRO_NAME: "almalinux"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "10"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 10 on aarch64"
 
@@ -150,8 +165,20 @@ jobs:
             DOCKERTAG: "alma10"
             DISTRO_ARCH: "ppc64le"
             DISTRO_NAME: "almalinux"
+            DISTRO_NAMESPACE: "library"
             DISTRO_VER: "10"
             SHORT_DESCRIPTION: "conda-forge build image for Alma 10 on ppc64le"
+
+          - DOCKERIMAGE: linux-anvil-riscv64
+            DOCKERFILE: linux-anvil
+            DOCKERTAG: "rocky10"
+            DISTRO_ARCH: "riscv64"
+            DISTRO_NAME: "rockylinux"
+            # in contrast to almalinux (which is in the "official" namespace),
+            # rockylinux images are currently under a separate namespace
+            DISTRO_NAMESPACE: "rockylinux"
+            DISTRO_VER: "10"
+            SHORT_DESCRIPTION: "conda-forge build image for Rocky 10 on riscv64"
 
     env:
       DOCKERIMAGE: ${{ matrix.cfg.DOCKERIMAGE }}
@@ -160,6 +187,7 @@ jobs:
       CUDA_VER: ${{ matrix.cfg.CUDA_VER }}
       DISTRO_ARCH: ${{ matrix.cfg.DISTRO_ARCH }}
       DISTRO_NAME: ${{ matrix.cfg.DISTRO_NAME }}
+      DISTRO_NAMESPACE: ${{ matrix.cfg.DISTRO_NAMESPACE }}
       DISTRO_VER: ${{ matrix.cfg.DISTRO_VER }}
       SHORT_DESCRIPTION: ${{ matrix.cfg.SHORT_DESCRIPTION }}
 
@@ -175,6 +203,14 @@ jobs:
         run: |
           docker info
 
+      # adapted from what `workflow_settings.free_disk_space: quick` generates on regular feedstocks
+      - name: Manage disk space
+        env:
+          OS: "ubuntu"
+        shell: bash
+        run: |
+          .scripts/free_disk_space.sh "quick"
+
       - name: Configure qemu
         run: |
           ./download-qemu-static.sh
@@ -185,6 +221,7 @@ jobs:
             --build-arg CUDA_VER \
             --build-arg DISTRO_ARCH \
             --build-arg DISTRO_NAME \
+            --build-arg DISTRO_NAMESPACE \
             --build-arg DISTRO_VER \
             -t condaforge/$DOCKERIMAGE:$DOCKERTAG \
             -f ${DOCKERFILE:-${DOCKERIMAGE}}/Dockerfile \
