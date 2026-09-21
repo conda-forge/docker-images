@@ -33,6 +33,11 @@ ADD https://www.random.org/cgi-bin/randbyte?nbytes=4096&format=h /opt/docker/etc
 ADD qemu-aarch64-static /usr/bin/qemu-aarch64-static
 ADD qemu-ppc64le-static /usr/bin/qemu-ppc64le-static
 
+# aarch64-native copies, for images used on aarch64 build hosts where the
+# x86_64 binaries above cannot be executed.
+ADD qemu-ppc64le-static-aarch64 /usr/bin/qemu-ppc64le-static-aarch64
+ADD qemu-x86_64-static-aarch64 /usr/bin/qemu-x86_64-static-aarch64
+
 # we want to persist a path in ldconfig (to avoid having to always set LD_LIBRARY_PATH), but *after* the existing entries;
 # since entries in ld.so.conf.d have precedence before the preconfigured directories, we first add the latter to the former
 # the upstream images all have libcuda.so under $CUDA_HOME/compat;
