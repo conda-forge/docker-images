@@ -30,6 +30,13 @@ ADD qemu-ppc64le-static /usr/bin/qemu-ppc64le-static
 ADD qemu-s390x-static /usr/bin/qemu-s390x-static
 ADD qemu-riscv64-static /usr/bin/qemu-riscv64-static
 
+# aarch64-native copies, for images used on aarch64 build hosts where the
+# x86_64 binaries above cannot be executed.
+ADD qemu-ppc64le-static-aarch64 /usr/bin/qemu-ppc64le-static-aarch64
+ADD qemu-s390x-static-aarch64 /usr/bin/qemu-s390x-static-aarch64
+ADD qemu-riscv64-static-aarch64 /usr/bin/qemu-riscv64-static-aarch64
+ADD qemu-x86_64-static-aarch64 /usr/bin/qemu-x86_64-static-aarch64
+
 # (arm64v8/centos:7 only) Fix language override to get a working en_US.UTF-8 locale; backports:
 # https://github.com/CentOS/sig-cloud-instance-build/commit/2892c17fa8a520e58c3f42cd56587863fe675670
 RUN if [ "${DISTRO_ARCH}" = "arm64/v8" ] && [ "${DISTRO_NAME}${DISTRO_VER}" = "centos7" ]; then \
