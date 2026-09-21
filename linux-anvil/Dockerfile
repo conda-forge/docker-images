@@ -37,6 +37,9 @@ ADD qemu-s390x-static-aarch64 /usr/bin/qemu-s390x-static-aarch64
 ADD qemu-riscv64-static-aarch64 /usr/bin/qemu-riscv64-static-aarch64
 ADD qemu-x86_64-static-aarch64 /usr/bin/qemu-x86_64-static-aarch64
 
+# Registers the emulators above with the host's binfmt_misc.
+COPY scripts/register-binfmt /opt/docker/bin/register-binfmt
+
 # (arm64v8/centos:7 only) Fix language override to get a working en_US.UTF-8 locale; backports:
 # https://github.com/CentOS/sig-cloud-instance-build/commit/2892c17fa8a520e58c3f42cd56587863fe675670
 RUN if [ "${DISTRO_ARCH}" = "arm64/v8" ] && [ "${DISTRO_NAME}${DISTRO_VER}" = "centos7" ]; then \
