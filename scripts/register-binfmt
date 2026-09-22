@@ -1,24 +1,50 @@
 #!/bin/sh
-# Register this image's aarch64-native QEMU emulators with the host's
-# binfmt_misc, for use on aarch64 build hosts:
+# Register this image's QEMU emulators with the host's binfmt_misc:
 #
-#     docker run --rm --privileged --entrypoint /opt/docker/bin/register-binfmt IMAGE
+#     docker run --rm --privileged \
+#         --entrypoint /opt/docker/bin/register-binfmt IMAGE [BUILD_ARCH]
 #
-# Targets whose emulator is not present in the image are skipped.
+# BUILD_ARCH is the architecture of the build host, x86_64 or aarch64, and
+# selects which of the image's two emulator sets to register. It defaults to
+# the machine this runs on; pass it explicitly whenever that may not be the
+# build host's architecture. Targets whose emulator is not present in the
+# image are skipped, so the same script serves both images.
 
 set -e
+
+build_arch="${1:-$(uname -m)}"
+case "${build_arch}" in
+    x86_64)
+        # The x86_64-native emulators keep the historical unsuffixed names.
+        suffix=''
+        ;;
+    aarch64)
+        suffix='-aarch64'
+        ;;
+    *)
+        echo "register-binfmt: unsupported build architecture '${build_arch}'," \
+             "expected x86_64 or aarch64" >&2
+        exit 1
+        ;;
+esac
 
 mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc 2>/dev/null || true
 echo -1 > /proc/sys/fs/binfmt_misc/status 2>/dev/null || true
 
 # The kernel parses the \xHH escapes in the magic and mask, so they must reach
 # /proc/sys/fs/binfmt_misc/register unexpanded; hence printf '%s'.
+# No emulator is shipped for the build host's own architecture, so that target
+# drops out through the presence check rather than needing a special case.
 register() {
-    interpreter="/usr/bin/qemu-$1-static-aarch64"
+    interpreter="/usr/bin/qemu-$1-static${suffix}"
     [ -x "${interpreter}" ] || return 0
     printf '%s\n' ":qemu-$1:M::$2:$3:${interpreter}:OC" \
         > /proc/sys/fs/binfmt_misc/register
 }
+
+register aarch64 \
+    '\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xb7\x00' \
+    '\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'
 
 register ppc64le \
     '\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x15\x00' \
