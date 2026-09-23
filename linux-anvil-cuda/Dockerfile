@@ -38,6 +38,9 @@ ADD qemu-ppc64le-static /usr/bin/qemu-ppc64le-static
 ADD qemu-ppc64le-static-aarch64 /usr/bin/qemu-ppc64le-static-aarch64
 ADD qemu-x86_64-static-aarch64 /usr/bin/qemu-x86_64-static-aarch64
 
+# Registers the emulators above with the host's binfmt_misc.
+COPY scripts/register-binfmt /opt/docker/bin/register-binfmt
+
 # we want to persist a path in ldconfig (to avoid having to always set LD_LIBRARY_PATH), but *after* the existing entries;
 # since entries in ld.so.conf.d have precedence before the preconfigured directories, we first add the latter to the former
 # the upstream images all have libcuda.so under $CUDA_HOME/compat;
