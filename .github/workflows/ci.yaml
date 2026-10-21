@@ -216,8 +216,10 @@ jobs:
           ./download-qemu-static.sh
 
       - name: Build image
+        timeout-minutes: 90
         run: |
           docker build \
+            --platform linux/${DISTRO_ARCH} \
             --build-arg CUDA_VER \
             --build-arg DISTRO_ARCH \
             --build-arg DISTRO_NAME \
@@ -228,6 +230,7 @@ jobs:
             --no-cache --squash .
 
       - name: Run image
+        timeout-minutes: 90
         run: |
           ./.circleci/run_docker_build.sh
 

@@ -32,6 +32,7 @@ if [[ -z ${MINIFORGE_VARIANT:-} ]]; then
     fi
 
     docker run ${DOCKER_RUN_ARGS} \
+               --platform "linux/${DISTRO_ARCH}" \
                -v "${FEEDSTOCK_ROOT}":/home/conda/feedstock_root \
                -e HOST_USER_ID \
                `docker images -q condaforge/$DOCKERIMAGE` \
