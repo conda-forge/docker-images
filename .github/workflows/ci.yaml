@@ -218,6 +218,7 @@ jobs:
       - name: Build image
         run: |
           docker build \
+            --platform linux/${DISTRO_ARCH} \
             --build-arg CUDA_VER \
             --build-arg DISTRO_ARCH \
             --build-arg DISTRO_NAME \
