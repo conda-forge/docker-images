@@ -216,6 +216,7 @@ jobs:
           ./download-qemu-static.sh
 
       - name: Build image
+        timeout-minutes: 60
         run: |
           docker build \
             --platform linux/${DISTRO_ARCH} \
