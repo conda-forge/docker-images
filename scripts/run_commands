@@ -52,7 +52,7 @@ export MAMBA_ROOT_PREFIX=/opt/conda
     patch \
     pip \
     su-exec \
-    "pixi >=0.82.1" \
+    "pixi>=0.82.1" \
     tini \
     mamba \
     conda \
