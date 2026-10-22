@@ -50,7 +50,7 @@ export MAMBA_ROOT_PREFIX=/opt/conda
     python=${python_version} \
     git \
     patch \
-    pip \
+    "pip>=26.2.2" \
     su-exec \
     "pixi>=0.82.1" \
     tini \
