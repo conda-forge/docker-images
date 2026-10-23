@@ -216,7 +216,7 @@ jobs:
           ./download-qemu-static.sh
 
       - name: Build image
-        timeout-minutes: 90
+        timeout-minutes: 120
         run: |
           docker build \
             --platform linux/${DISTRO_ARCH} \
@@ -230,7 +230,7 @@ jobs:
             --no-cache --squash .
 
       - name: Run image
-        timeout-minutes: 90
+        timeout-minutes: 120
         run: |
           ./.circleci/run_docker_build.sh
 
