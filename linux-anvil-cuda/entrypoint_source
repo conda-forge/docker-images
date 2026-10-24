@@ -1,5 +1,0 @@
-# Add `CUDA_HOME` binaries to `PATH`.
-export PATH="${PATH}:${CUDA_HOME}/bin"
-
-# Activate the `base` conda environment.
-conda activate base
