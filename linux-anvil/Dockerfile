@@ -78,8 +78,7 @@ RUN /opt/docker/bin/run_commands
 # writable. chmod on a directory does not recurse, so this layer is tiny and
 # the rest of /opt/conda keeps its build-time ownership. Making the whole
 # prefix world-writable is unnecessary and unsafe.
-RUN chmod -R g=u /opt/conda && \
-    mkdir -p /home/conda && chmod 0777 /home/conda && \
+RUN mkdir -p /home/conda && chmod 0777 /home/conda && \
     for d in pkgs condabin targets envs share conda-meta locks var docs etc pids pro conda-history .conda_lock tokens; do \
         if [ -d "/opt/conda/$d" ]; then chmod g=u,o+w "/opt/conda/$d"; fi; \
     done && \

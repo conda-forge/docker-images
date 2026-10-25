@@ -8,17 +8,16 @@ unalias cp 2>/dev/null || true
 # Adapted from https://denibertovic.com/posts/handling-permissions-with-docker-volumes/
 USER_ID=${HOST_USER_ID:-9001}
 
-# Detect whether the container's root (uid 0) is the *real* root on the host.
-# Under rootful Docker / rootful Podman the init user namespace maps inner
-# uid 0 to outer uid 0 (e.g. "0 0 4294967296"). Under rootless Podman run
-# with `--userns=keep-id` (or `podman unshare`) inner uid 0 is mapped to the
-# unprivileged host user, so we cannot create users, chown system files, or
-# drop privileges. See https://github.com/conda-forge/docker-images/issues/280
+# Under rootful Docker/Podman, inner uid 0 maps to outer uid 0
+# (e.g. "0 0 4294967296"). Under rootless Podman run with `--userns=keep-id`
+# (or `podman unshare`), inner uid 0 maps to the unprivileged host user, so
+# we cannot create users, chown system files, or drop privileges.
+# See https://github.com/conda-forge/docker-images/issues/280
 # and https://github.com/conda-forge/conda-smithy/issues/2731.
 #
 # /proc/self/uid_map lines are: <inner-start> <outer-start> <length>
 ROOTLESS=0
-while read -r inner_start outer_start _length; do
+while read -r _ outer_start _; do
     if [ "${outer_start:-0}" != "0" ]; then
         ROOTLESS=1
         break
@@ -26,7 +25,8 @@ while read -r inner_start outer_start _length; do
 done < /proc/self/uid_map
 
 if [ "${ROOTLESS}" = "0" ]; then
-    # ---- rootful path (unchanged behaviour) ----
+    # Rootful path: create a conda user at the host's uid so the container can
+    # write to mounted volumes.
     useradd --shell /bin/bash -u $USER_ID -G lucky -o -c "" -m conda
     export HOME=/home/conda
     export USER=conda
@@ -36,11 +36,10 @@ if [ "${ROOTLESS}" = "0" ]; then
     chown conda:conda $HOME
     cp -R /etc/skel $HOME && chown -R conda:conda $HOME/skel && (ls -A1 $HOME/skel | xargs -I {} mv -n $HOME/skel/{} $HOME) && rm -Rf $HOME/skel
 else
-    # ---- rootless path ----
-    # The container's root is already the host user, so we run as-is instead
-    # of creating a new user, chowning /home/conda, or dropping privileges with
-    # su-exec (all of which require real root). Mounted volumes are owned by
-    # the host user and are therefore directly writable.
+    # Rootless path: the container's root is already the host user, so we run
+    # as-is instead of creating a user, chowning /home/conda, or dropping
+    # privileges with su-exec (all require real root). Mounted volumes are
+    # owned by the host user, so they are directly writable.
     #
     # Pre-create /home/conda as a mount point: podman does not create a bind
     # mount's parent the way docker does, so a feedstock mounted at
@@ -68,10 +67,6 @@ cd $HOME 2>/dev/null || true
 # Source everything that needs to be.
 . /opt/docker/bin/entrypoint_source
 
-# Run whatever the user wants. Under rootless mode there is no su-exec to drop
-# to, so invoke conda directly.
-if [ -n "$supkg" ]; then
-    exec /opt/conda/bin/$supkg conda "$@"
-else
-    exec /opt/conda/bin/conda "$@"
-fi
+# Run whatever the user wants. Under rootful, su-exec drops to the conda
+# user; under rootless there is no su-exec, so conda runs as the host user.
+exec /opt/conda/bin/${supkg:+$supkg }conda "$@"

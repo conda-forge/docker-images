@@ -53,11 +53,11 @@ export DOCKER_EXECUTABLE=podman
 ./build-locally.py
 ```
 
-Under rootless podman the container's root maps to the unprivileged host
-user, so the entrypoint skips `useradd`, `chown /home/conda`, and
-`su-exec` (all require real root) and runs conda as the host user. That user
-owns the mounted volumes, so writes work. The run script passes
-`--userns=keep-id` to hold that mapping.
+The run script passes `--userns=keep-id` when podman is the executable, so
+the container's root maps to the unprivileged host user. The entrypoint then
+skips `useradd`, `chown /home/conda`, and `su-exec` (all require real root)
+and runs conda as the host user. That user owns the mounted volumes, so
+writes work.
 
 See https://github.com/conda-forge/docker-images/issues/280 and
 https://github.com/conda-forge/conda-smithy/issues/2731.
