@@ -38,6 +38,30 @@ To get started with this image, you can simply run it at the command line with s
 docker run --rm -t condaforge/@@IMAGENAME@@:@@DOCKERTAG@@ echo "hi"
 ```
 
+### Build and run with rootless podman
+
+```bash
+export DOCKER_EXECUTABLE=podman
+./.circleci/run_docker_build.sh
+```
+
+For local feedstock builds, set the same variable before running
+`build-locally.py`:
+
+```bash
+export DOCKER_EXECUTABLE=podman
+./build-locally.py
+```
+
+Under rootless podman the container's root maps to the unprivileged host
+user, so the entrypoint skips `useradd`, `chown /home/conda`, and
+`su-exec` (all require real root) and runs conda as the host user. That user
+owns the mounted volumes, so writes work. The run script passes
+`--userns=keep-id` to hold that mapping.
+
+See https://github.com/conda-forge/docker-images/issues/280 and
+https://github.com/conda-forge/conda-smithy/issues/2731.
+
 or use it in your Dockerfile:
 
 ```Dockerfile
