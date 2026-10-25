@@ -40,11 +40,6 @@ docker run --rm -t condaforge/@@IMAGENAME@@:@@DOCKERTAG@@ echo "hi"
 
 ### Build and run with rootless podman
 
-```bash
-export DOCKER_EXECUTABLE=podman
-./.circleci/run_docker_build.sh
-```
-
 For local feedstock builds, set the same variable before running
 `build-locally.py`:
 
