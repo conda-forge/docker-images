@@ -25,10 +25,9 @@ upstream [repo](https://github.com/conda-forge/docker-images/compare).
 
 ## Important Image Tags
 
-The tags on this image are either:
+The tag on this image is the Linux distro and version used in the image:
 
-- latest: used for non-CUDA aware images
-- @@DOCKERTAG@@: the CUDA version used in the image
+- @@DOCKERTAG@@
 
 ## Getting Started & Usage
 
