@@ -8,19 +8,19 @@ export python_version="3.14"
 # conda-forge (rather than the mamba-org/micromamba-releases GitHub releases),
 # since conda-forge is the only place currently publishing micromamba builds
 # for riscv64; see https://github.com/conda-forge/conda-forge.github.io/issues/1744
-export micromamba_version="2.9.0-0"
+export micromamba_version="2.10.0-0"
 if [ "$(uname -m)" = "x86_64" ]; then
    export micromamba_subdir="linux-64"
-   export micromamba_chksum="8761c382127e6363bd9e0a2451aa3ef90d071a79133f736e2f759a3bf13040dd"
+   export micromamba_chksum="9a97976244929bbae28fb1fae504e74a3e7e6d1932870e3a03321f01b7fbd07b"
 elif [ "$(uname -m)" = "ppc64le" ]; then
    export micromamba_subdir="linux-ppc64le"
-   export micromamba_chksum="23417c79ced152dd6f8e66731e45a77d7058e6af5007eef6fa584f34ce6232b2"
+   export micromamba_chksum="6a143602e15bbf10b2345d7a8e322af6ffc7c057bec23d0a73382bd93176c2c9"
 elif [ "$(uname -m)" = "aarch64" ]; then
    export micromamba_subdir="linux-aarch64"
-   export micromamba_chksum="e705ffeed90ce0659eb546e4b1e1028c9eaf0bc9cc854867b19ac5ce0ba5852f"
+   export micromamba_chksum="890bc4906e6ab17f1b393f0da21547f75e000078e573a156316ec925b92a4a4c"
 elif [ "$(uname -m)" = "riscv64" ]; then
    export micromamba_subdir="linux-riscv64"
-   export micromamba_chksum="ee8f4026b762924cdbafd59036165a6b6138a920d5449d2f84284e310a5ee55d"
+   export micromamba_chksum="cb687df4c635b5297ed31cbe9573904e7dc5e7b586c14e312c2f5a4b3aaabd74"
 else
    exit 1
 fi
