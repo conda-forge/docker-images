@@ -192,6 +192,10 @@ jobs:
         run: |
           ./.circleci/run_docker_build.sh
 
+      - name: Test register-binfmt
+        run: |
+          ./.circleci/test_register_binfmt.sh
+
       - name: Make readme file
         run: |
           ./scripts/gen_readme

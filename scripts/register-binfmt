@@ -29,15 +29,19 @@ case "${build_arch}" in
 esac
 
 mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc 2>/dev/null || true
-echo -1 > /proc/sys/fs/binfmt_misc/status 2>/dev/null || true
 
 # The kernel parses the \xHH escapes in the magic and mask, so they must reach
 # /proc/sys/fs/binfmt_misc/register unexpanded; hence printf '%s'.
 # No emulator is shipped for the build host's own architecture, so that target
 # drops out through the presence check rather than needing a special case.
+# An existing entry of the same name is removed first so that rerunning the
+# script replaces it; the host's other handlers are left alone.
 register() {
     interpreter="/usr/bin/qemu-$1-static${suffix}"
     [ -x "${interpreter}" ] || return 0
+    if [ -e "/proc/sys/fs/binfmt_misc/qemu-$1" ]; then
+        echo -1 > "/proc/sys/fs/binfmt_misc/qemu-$1"
+    fi
     printf '%s\n' ":qemu-$1:M::$2:$3:${interpreter}:OC" \
         > /proc/sys/fs/binfmt_misc/register
 }
