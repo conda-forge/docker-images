@@ -70,6 +70,21 @@ RUN if [ "${DISTRO_NAME}" = "almalinux" ] || [ "${DISTRO_NAME}" = "rockylinux" ]
 COPY scripts/run_commands /opt/docker/bin/run_commands
 RUN /opt/docker/bin/run_commands
 
+# Under rootless podman the container runs as the unprivileged host user, so
+# make the conda prefix and the home mount point writable without needing
+# root (see scripts/entrypoint). The rootful path chowns these at runtime.
+#
+# Only the top-level directories conda writes to at runtime are made
+# writable. chmod on a directory does not recurse, so this layer is tiny and
+# the rest of /opt/conda keeps its build-time ownership. Making the whole
+# prefix world-writable is unnecessary and unsafe.
+RUN mkdir -p /home/conda && chmod 0777 /home/conda && \
+    for d in pkgs condabin targets envs share conda-meta locks var docs etc pids pro conda-history .conda_lock tokens; do \
+        if [ -d "/opt/conda/$d" ]; then chmod g=u,o+w "/opt/conda/$d"; fi; \
+    done && \
+    chmod g=u,o+w /opt/conda /home /home/conda && \
+    chmod 0755 /root
+
 # Add a file for users to source to activate the `conda`
 # environment `base`. Also add a file that wraps that for
 # use with the `ENTRYPOINT`.
