@@ -37,7 +37,7 @@ if [[ -z ${MINIFORGE_VARIANT:-} ]]; then
                -e HOST_USER_ID \
                `docker images -q condaforge/$DOCKERIMAGE` \
                bash \
-               /home/conda/feedstock_root/.circleci/test_docker_container.sh
+               /home/conda/feedstock_root/.scripts/test_docker_container.sh
 
     # verify that the end of the script was reached
     test -f "$DONE_CANARY"

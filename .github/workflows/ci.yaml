@@ -190,11 +190,11 @@ jobs:
       - name: Run image
         timeout-minutes: 120
         run: |
-          ./.circleci/run_docker_build.sh
+          ./.scripts/run_docker_build.sh
 
       - name: Test register-binfmt
         run: |
-          ./.circleci/test_register_binfmt.sh
+          ./.scripts/test_register_binfmt.sh
 
       - name: Make readme file
         run: |
